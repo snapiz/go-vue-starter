@@ -649,5 +649,5 @@
 			"revision": ""
 		}
 	],
-	"rootPath": "https://github.com/snapiz/go-vue-starter"
+	"rootPath": "github.com/snapiz/go-vue-starter"
 }
