@@ -223,9 +223,10 @@ func createOauthConf(c echo.Context, provider *providerConfig) oauth2.Config {
 }
 
 func getHost(c echo.Context) string {
-	r := c.Request()
+	return os.Getenv("WEB_URL")
+	/* r := c.Request()
 	host := r.Header.Get("X-Forwarded-Host")
 	proto := r.Header.Get("X-Forwarded-Proto")
 
-	return fmt.Sprintf("%s://%s", proto, host)
+	return fmt.Sprintf("%s://%s", proto, host) */
 }

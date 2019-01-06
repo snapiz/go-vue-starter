@@ -37,14 +37,14 @@ const router = new Router({
     {
       path: "/login",
       name: "login",
-      meta: { acl: ACL.ANONYME },
+      meta: { query: false },
       component: () =>
         import(/* webpackChunkName: "login" */ "./views/Login.vue")
     },
     {
       path: "/register",
       name: "register",
-      meta: { acl: ACL.ANONYME },
+      meta: { query: false },
       component: () =>
         import(/* webpackChunkName: "register" */ "./views/Register.vue")
     },
