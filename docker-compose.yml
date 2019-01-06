@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+  
+  db:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_MULTIPLE_DATABASES=gvs_test
+      - POSTGRES_USER=gvs
+      - POSTGRES_PASSWORD=gvs
+      - POSTGRES_DB=gvs
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
+volumes:
+  db-data:

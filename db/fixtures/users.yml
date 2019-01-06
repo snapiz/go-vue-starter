@@ -1,0 +1,14 @@
+- id: 1
+  email: john@doe.com
+  password: $argon2id$v=19$m=65536,t=3,p=2$XEqhUPoyTftr1HQZ7/p0dA$CvX5+Et7e+QlgvwjrK2J7bFtBODhDjTuIoh5wJlDCl4
+  role: user
+  token_version: 1546097186
+  created_at: 2016-01-01 12:30:12
+  updated_at: 2016-01-01 12:30:12
+
+- id: 2
+  email: albert@dupont.com
+  password: $argon2id$v=19$m=65536,t=3,p=2$XEqhUPoyTftr1HQZ7/p0dA$CvX5+Et7e+QlgvwjrK2J7bFtBODhDjTuIoh5wJlDCl4
+  role: staff
+  token_version: 1546097186
+  created_at: 2016-01-01 12:30:12
