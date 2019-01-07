@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -223,10 +224,12 @@ func createOauthConf(c echo.Context, provider *providerConfig) oauth2.Config {
 }
 
 func getHost(c echo.Context) string {
-	return os.Getenv("WEB_URL")
-	/* r := c.Request()
-	host := r.Header.Get("X-Forwarded-Host")
-	proto := r.Header.Get("X-Forwarded-Proto")
+	r := c.Request()
+	u, err := url.Parse(r.Referer())
 
-	return fmt.Sprintf("%s://%s", proto, host) */
+	if err != nil {
+		return GetIssuer(c)
+	}
+
+	return fmt.Sprintf("%s://%s", u.Scheme, u.Host)
 }

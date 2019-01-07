@@ -1,0 +1,36 @@
+{
+    "eslint.enable": true,
+    "eslint.run": "onType",
+    "eslint.validate": [
+        {
+            "language": "vue",
+            "autoFix": true
+        },
+        {
+            "language": "html",
+            "autoFix": true
+        },
+        {
+            "language": "javascript",
+            "autoFix": true
+        },
+        {
+            "language": "javascriptreact",
+            "autoFix": true
+        }
+    ],
+    "eslint.alwaysShowStatus": true,
+    "eslint.autoFixOnSave": true,
+    "vetur.format.defaultFormatter.js": "prettier-eslint",
+    "vetur.format.defaultFormatter.css": "prettier",
+    "files.watcherExclude": {
+        "**/web/node_modules/**": true,
+        "**/vendor/**": true
+    },
+    "search.exclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/web/node_modules": true,
+        "**/vendor/**": true
+    }
+}

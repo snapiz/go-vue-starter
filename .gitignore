@@ -1,3 +1,2 @@
 .env.local
-.vscode
 vendor/*/
