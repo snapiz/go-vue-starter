@@ -31,14 +31,14 @@ hacking:
 
 ```bash
 $ go get bitbucket.org/liamstask/goose/cmd/goose
-$ get -u -t github.com/volatiletech/sqlboiler
+$ go get -u -t github.com/volatiletech/sqlboiler
 $ go get github.com/snapiz/go-vue-starter
 $ cd ~/go/src/github.com/snapiz/go-vue-starter
 $ go run server.go
 
 # open new terminal
 $ cd web
-$ yarn install                     # Installs dependencies; creates PostgreSQL database
+$ yarn install                     # Installs dependencies;
 $ yarn serve                       # Compile the app and opens it in a browser with "live reload"
 ```
 
@@ -68,7 +68,7 @@ $ yarn test                        # Run unit tests. Or, `yarn test -- --watch`
 3.  Deploy your application by running `git push heroku master`.
 4.  Migrate db schema by running `heroku run goose -- -env=production up` file.
 5.  Update `/web/public/_redirects` with your own domain.
-5.  Build your static files by running `yarn build` in web folder.
+5.  Build static files by running `yarn build` in web folder.
 6.  Finally, drag and drop dist to netlify deploy.
 
 ### How to Update
