@@ -24,6 +24,8 @@
     "vetur.format.defaultFormatter.js": "prettier-eslint",
     "vetur.format.defaultFormatter.css": "prettier",
     "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
         "**/web/node_modules/**": true,
         "**/vendor/**": true
     },

@@ -15,9 +15,9 @@
           v-if="$v.password.$dirty && (!$v.password.minLength || !$v.password.maxLength)"
         >Must be between 8 and 20 characters length</div>
 
+        <div class="error" v-if="error">{{error}}</div>
         <button type="submit">Register</button>
         <router-link tag="button" to="/login">Login</router-link>
-        <div class="error" v-if="error">{{error}}</div>
       </form>
     </div>
   </Page>

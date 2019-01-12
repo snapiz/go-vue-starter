@@ -56,7 +56,7 @@ $ sqlboiler psql                   # Generate models from db
 ### How to Test
 
 ```bash
-$ go test ./..                     # Run unit tests for server
+$ APP_ENV=test go test ./..                     # Run unit tests for server
 $ cd web                           
 $ yarn test                        # Run unit tests. Or, `yarn test -- --watch`
 ```

@@ -3,6 +3,8 @@ package api
 import (
 	"context"
 	"net/http"
+	"net/http/httptest"
+	"strings"
 
 	"github.com/snapiz/go-vue-starter/api/common"
 	"github.com/snapiz/go-vue-starter/db/models"
@@ -33,7 +35,10 @@ func Handler(c echo.Context) error {
 // NewGraphQLContext graphql context
 func NewGraphQLContext(c echo.Context, u *models.User) (ctx context.Context) {
 	if c == nil {
-		c = echo.New().NewContext(nil, nil)
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c = echo.New().NewContext(req, rec)
 	}
 
 	if u != nil {

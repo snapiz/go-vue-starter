@@ -40,6 +40,14 @@ var UserType = graphql.NewObject(graphql.ObjectConfig{
 			Type:        graphql.String,
 			Description: "The email of the user.",
 		},
+		"hasPassword": &graphql.Field{
+			Type:        graphql.Boolean,
+			Description: "The email of the user.",
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				u := p.Source.(*models.User)
+				return u.Password.Ptr() != nil, nil
+			},
+		},
 		"displayName": &graphql.Field{
 			Type:        graphql.String,
 			Description: "The name of the user.",

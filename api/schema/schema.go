@@ -20,6 +20,13 @@ func init() {
 				"me":   user.MeQuery,
 			},
 		}),
+		Mutation: graphql.NewObject(graphql.ObjectConfig{
+			Name: "Mutation",
+			Fields: graphql.Fields{
+				"updateUser": user.UpdateUserMutation,
+				"changePassword": user.ChangePasswordMutation,
+			},
+		}),
 	})
 	if err != nil {
 		// panic if there is an error in schema

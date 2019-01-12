@@ -1,6 +1,8 @@
 package common
 
-import validator "gopkg.in/go-playground/validator.v9"
+import (
+	validator "gopkg.in/go-playground/validator.v9"
+)
 
 // Validator instance
 var Validator = validator.New()

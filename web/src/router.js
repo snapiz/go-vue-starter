@@ -35,6 +35,23 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "home" */ "./views/Home.vue")
     },
     {
+      path: "/me",
+      name: "me",
+      meta: {
+        query: gql`
+          {
+            me {
+              email
+              displayName
+              picture
+              hasPassword
+            }
+          }
+        `
+      },
+      component: () => import(/* webpackChunkName: "me" */ "./views/Me.vue")
+    },
+    {
       path: "/login",
       name: "login",
       meta: { query: false },
@@ -105,6 +122,7 @@ router.beforeEach(async (to, from, next) => {
         gql`
           {
             me {
+              id
               displayName
               role
             }

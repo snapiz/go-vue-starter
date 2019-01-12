@@ -1,4 +1,5 @@
 import { pick, find, cloneDeep } from "lodash";
+import idx from "idx";
 
 // Create cookie
 export function createCookie(name, value, days) {
@@ -62,4 +63,8 @@ function mergeTwoQueries(q1, q2, n) {
       }
     });
   return n;
+}
+
+export function getGraphQLError(error) {
+  return idx(error, x => x.networkError.result.errors[0].message) || "";
 }
