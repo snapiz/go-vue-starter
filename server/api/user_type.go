@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/snapiz/go-vue-starter/db/models"
+	"github.com/snapiz/go-vue-starter/server/db/models"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/relay"

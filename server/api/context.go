@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/snapiz/go-vue-starter/db/models"
+	"github.com/snapiz/go-vue-starter/server/db/models"
 	validator "gopkg.in/go-playground/validator.v9"
 
 	"github.com/labstack/echo"

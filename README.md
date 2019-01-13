@@ -34,12 +34,13 @@ $ go get bitbucket.org/liamstask/goose/cmd/goose
 $ go get -u -t github.com/volatiletech/sqlboiler
 $ go get github.com/snapiz/go-vue-starter
 $ cd ~/go/src/github.com/snapiz/go-vue-starter
-$ go run server.go
 
-# open new terminal
-$ cd web
-$ yarn install                     # Installs dependencies;
-$ yarn serve                       # Compile the app and opens it in a browser with "live reload"
+# Setup
+$ yarn install
+$ yarn db:up
+
+# Serve
+$ yarn start
 ```
 
 Then open [http://localhost:9000/](http://localhost:9000/) to see your app.<br>
@@ -47,53 +48,33 @@ Then open [http://localhost:9000/](http://localhost:9000/) to see your app.<br>
 ### How to Migrate Database Schema
 
 ```bash
-$ goose create AddSomeColumns sql  # Create a new database migration file
-$ goose up                         # Migrate database to the latest version
-$ goose down                       # Rollback the latest migration
-$ sqlboiler psql                   # Generate models from db
+$ yarn db:migration AddSomeColumns sql  # Create a new database migration file
+$ yarn db:up                            # Migrate database to the latest version
+$ yarn db:down                          # Rollback the latest migration
+$ yarn db:models                        # Generate models from db
 ```
 
 ### How to Test
 
 ```bash
-$ APP_ENV=test go test ./..                     # Run unit tests for server
-$ cd web                           
-$ yarn test                        # Run unit tests. Or, `yarn test -- --watch`
+$ yarn api-test                         # Run unit tests for server                          
+$ yarn test:unit                        # Run unit tests.  
+$ yarn test:e2e                         # Run end-to-end tests.
 ```
 
 ### How to Deploy
 
 1.  Create a new heroku project and postgres database.
 2.  Configure heroku environement variables by running `heroku config:set APP_ENV=production` and for all variables in .env.
-3.  Deploy your application by running `git push heroku master`.
-4.  Migrate db schema by running `heroku run goose -- -env=production up` file.
-5.  Update `/web/public/_redirects` with your own domain.
-5.  Build static files by running `yarn build` in web folder.
+3.  Deploy your application by running `yarn deploy`.
+4.  Update `/public/_redirects` with your own domain.
+5.  Build static files by running `yarn build`.
 6.  Finally, drag and drop dist to netlify deploy.
-
-### How to Update
-
-If you keep the original Git history after cloning this repo, you can always fetch and merge
-the recent updates back into your project by running:
-
-```bash
-git remote add go-vue-starter https://github.com/snapiz/go-vue-starter.git
-git checkout master
-git fetch go-vue-starter
-git merge go-vue-starter/master
-govendor sync
-cd web
-yarn install
-yarn relay
-```
-
-_NOTE: Try to merge as soon as the new changes land on the master branch in the upstream repository,
-otherwise your project may differ too much from the base/upstream repo._
 
 ### License
 
 Copyright © 2019 snapiz. This source code is licensed under the MIT license found in
-the [LICENSE](https://github.com/snapiz/go-vue-starter/LICENSE) file.
+the [LICENSE](https://github.com/snapiz/go-vue-starter/server/LICENSE) file.
 
 ---
 

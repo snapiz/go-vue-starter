@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/snapiz/go-vue-starter/common"
-	"github.com/snapiz/go-vue-starter/db/models"
+	"github.com/snapiz/go-vue-starter/server/common"
+	"github.com/snapiz/go-vue-starter/server/db/models"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"

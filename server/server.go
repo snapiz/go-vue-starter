@@ -6,10 +6,10 @@ import (
 	_ "github.com/bmizerany/pq"
 	"github.com/labstack/echo"
 
-	"github.com/snapiz/go-vue-starter/api"
-	"github.com/snapiz/go-vue-starter/auth"
-	_ "github.com/snapiz/go-vue-starter/db"
-	"github.com/snapiz/go-vue-starter/middlewares"
+	"github.com/snapiz/go-vue-starter/server/api"
+	"github.com/snapiz/go-vue-starter/server/auth"
+	_ "github.com/snapiz/go-vue-starter/server/db"
+	"github.com/snapiz/go-vue-starter/server/middlewares"
 )
 
 func main() {
@@ -23,5 +23,5 @@ func main() {
 
 	e.Any("/graphql", api.Handler, middlewares.JWT)
 
-	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("API_PORT")))
 }

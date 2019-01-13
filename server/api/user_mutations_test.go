@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/bmizerany/pq"
 	"github.com/graphql-go/graphql"
-	"github.com/snapiz/go-vue-starter/api"
+	"github.com/snapiz/go-vue-starter/server/api"
 )
 
 func TestUpdateUser_AnonymousAccessShouldBeDenied(t *testing.T) {

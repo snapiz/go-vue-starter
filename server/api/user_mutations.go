@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/snapiz/go-vue-starter/auth"
-	"github.com/snapiz/go-vue-starter/db/models"
-	"github.com/snapiz/go-vue-starter/db/services"
+	"github.com/snapiz/go-vue-starter/server/auth"
+	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/server/db/services"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/relay"

@@ -54,7 +54,7 @@ func init() {
 	if appEnv == "test" {
 		Fixtures, err = testfixtures.NewFolder(DB, &testfixtures.PostgreSQL{
 			SkipResetSequences: true,
-		}, os.Getenv("GOPATH")+"/src/github.com/snapiz/go-vue-starter/db/fixtures")
+		}, os.Getenv("GOPATH")+"/src/github.com/snapiz/go-vue-starter/server/db/fixtures")
 
 		if err != nil {
 			log.Fatal(err)
