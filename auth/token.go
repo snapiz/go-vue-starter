@@ -15,7 +15,7 @@ import (
 )
 
 // SetToken set cookie token
-func SetToken(c echo.Context, u models.User) (token string, err error) {
+func SetToken(c echo.Context, u *models.User) (token string, err error) {
 	expireDuration, err := time.ParseDuration(os.Getenv("SESSION_EXPIRE_DURATION"))
 
 	if err != nil {

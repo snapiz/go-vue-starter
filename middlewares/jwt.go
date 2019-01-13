@@ -39,7 +39,7 @@ func JWT(next echo.HandlerFunc) echo.HandlerFunc {
 			auth.RemoveToken(c)
 		} else {
 			u := users[0]
-			auth.SetToken(c, *u)
+			auth.SetToken(c, u)
 			c.Set("user", u)
 		}
 

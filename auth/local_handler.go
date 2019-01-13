@@ -3,7 +3,6 @@ package auth
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/volatiletech/null"
 	"github.com/volatiletech/sqlboiler/boil"
@@ -12,16 +11,17 @@ import (
 
 	"github.com/snapiz/go-vue-starter/common"
 	"github.com/snapiz/go-vue-starter/db/models"
+	"github.com/snapiz/go-vue-starter/db/services"
 
 	"github.com/labstack/echo"
 )
 
 type respJSON struct {
-	ID int `json:"id"`
-	Email string `json:"email"`
+	ID          int         `json:"id"`
+	Email       string      `json:"email"`
 	DisplayName null.String `json:"display_name"`
-	Picture null.String `json:"picture"`
-	Role string `json:"role"`
+	Picture     null.String `json:"picture"`
+	Role        string      `json:"role"`
 }
 
 type localParams struct {
@@ -52,14 +52,14 @@ var LocalHandler = func(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, "Invalid credentials")
 	}
 
-	user := *users[0]
+	user := users[0]
 
 	if user.Password.Ptr() == nil {
 		return c.JSON(http.StatusUnauthorized, "Password not defined")
 	}
 
 	// Verify password
-	if ok, err := common.Verify(p.Password, *user.Password.Ptr()); !ok || err != nil {
+	if ok := services.VerifyUserPassword(user, p.Password); !ok {
 		return c.JSON(http.StatusUnauthorized, "Invalid credentials")
 	}
 
@@ -76,11 +76,11 @@ var LocalHandler = func(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, &respJSON{
-		ID: user.ID,
-		Email: user.Email,
+		ID:          user.ID,
+		Email:       user.Email,
 		DisplayName: user.DisplayName,
-		Picture: user.Picture,
-		Role: user.Role,
+		Picture:     user.Picture,
+		Role:        user.Role,
 	})
 }
 
@@ -104,42 +104,46 @@ var RegisterHandler = func(c echo.Context) error {
 	users, err := models.Users(qm.Where("email = ?", p.Email)).AllG()
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, fmt.Sprintln(err))
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	if users != nil {
 		return c.JSON(http.StatusBadRequest, "Email already exists.")
 	}
 
-	hash, err := common.Hash(p.Password)
+	/* hash, err := common.Hash(p.Password)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, fmt.Sprintln(err))
+	} */
+
+	user := &models.User{
+		Email: p.Email,
+		/* Password:     null.StringFrom(hash),
+		TokenVersion: null.Int64From(time.Now().Unix()), */
 	}
 
-	user := models.User{
-		Email:        p.Email,
-		Password:     null.StringFrom(hash),
-		TokenVersion: null.Int64From(time.Now().Unix()),
+	if err := services.SetUserPassword(user, p.Password); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	err = user.InsertG(boil.Whitelist("email", "password", "token_version"))
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, fmt.Sprintln(err))
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	_, err = SetToken(c, user)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, fmt.Sprintln(err))
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	return c.JSON(http.StatusOK, &respJSON{
-		ID: user.ID,
-		Email: user.Email,
+		ID:          user.ID,
+		Email:       user.Email,
 		DisplayName: user.DisplayName,
-		Picture: user.Picture,
-		Role: user.Role,
+		Picture:     user.Picture,
+		Role:        user.Role,
 	})
 }

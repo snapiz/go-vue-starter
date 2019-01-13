@@ -6,10 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/snapiz/go-vue-starter/api/common"
 	"github.com/snapiz/go-vue-starter/db/models"
-
-	"github.com/snapiz/go-vue-starter/api/schema"
 
 	"github.com/graphql-go/handler"
 	"github.com/labstack/echo"
@@ -18,7 +15,7 @@ import (
 // Handler expose graphql
 func Handler(c echo.Context) error {
 	h := handler.New(&handler.Config{
-		Schema:   &schema.Schema,
+		Schema:   &Schema,
 		Pretty:   true,
 		GraphiQL: true,
 	})
@@ -45,5 +42,5 @@ func NewGraphQLContext(c echo.Context, u *models.User) (ctx context.Context) {
 		c.Set("user", u)
 	}
 
-	return context.WithValue(context.Background(), common.ContextKeyID, c)
+	return context.WithValue(context.Background(), contextKeyID, c)
 }

@@ -1,4 +1,4 @@
-package user_test
+package api_test
 
 import (
 	"testing"
@@ -8,7 +8,6 @@ import (
 	_ "github.com/bmizerany/pq"
 	"github.com/graphql-go/graphql"
 	"github.com/snapiz/go-vue-starter/api"
-	"github.com/snapiz/go-vue-starter/api/schema"
 )
 
 func TestUpdateUser_AnonymousAccessShouldBeDenied(t *testing.T) {
@@ -38,7 +37,7 @@ func TestUpdateUser_AnonymousAccessShouldBeDenied(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, nil),
 		VariableValues: params,
@@ -78,7 +77,7 @@ func TestUpdateUser_DisplayNameShouldBeInvalid(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -116,7 +115,7 @@ func TestUpdateUser_DisplayNameShouldBeInvalid(t *testing.T) {
 	}
 
 	result = graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -156,7 +155,7 @@ func TestUpdateUser_PictureShouldBeInvalid(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -200,7 +199,7 @@ func TestUpdateUser_ShouldUpdateUser(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -238,7 +237,7 @@ func TestUpdateUser_ShouldUpdateUser(t *testing.T) {
 	}
 
 	result = graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -273,7 +272,7 @@ func TestChangePassword_AnonymousAccessShouldBeDenied(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, nil),
 		VariableValues: params,
@@ -312,7 +311,7 @@ func TestChangePassword_ShouldNotUpdateInvalidPassword(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -349,7 +348,7 @@ func TestChangePassword_ShouldNotUpdateInvalidPassword(t *testing.T) {
 	}
 
 	result = graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -388,7 +387,7 @@ func TestChangePassword_ShouldNotUpdateBadPassword(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, albert),
 		VariableValues: params,
@@ -435,7 +434,7 @@ func TestChangePassword_ShouldUpdatePasswordWithoutCurrent(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,
@@ -477,7 +476,7 @@ func TestChangePassword_ShouldUpdatePassword(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:         schema.Schema,
+		Schema:         api.Schema,
 		RequestString:  query,
 		Context:        api.NewGraphQLContext(nil, john),
 		VariableValues: params,

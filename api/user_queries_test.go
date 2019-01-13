@@ -1,4 +1,4 @@
-package user_test
+package api_test
 
 import (
 	"log"
@@ -8,7 +8,6 @@ import (
 	_ "github.com/bmizerany/pq"
 	"github.com/graphql-go/graphql"
 	"github.com/snapiz/go-vue-starter/api"
-	"github.com/snapiz/go-vue-starter/api/schema"
 	"github.com/snapiz/go-vue-starter/db"
 	"github.com/snapiz/go-vue-starter/db/models"
 	"github.com/stretchr/testify/assert"
@@ -49,7 +48,7 @@ func TestMeQuery_AnonymousShouldNotQueryMe(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:        schema.Schema,
+		Schema:        api.Schema,
 		RequestString: query,
 		Context:       api.NewGraphQLContext(nil, nil),
 	})
@@ -83,7 +82,7 @@ func TestMeQuery_ShouldQueryMe(t *testing.T) {
 	}
 
 	result := graphql.Do(graphql.Params{
-		Schema:        schema.Schema,
+		Schema:        api.Schema,
 		RequestString: query,
 		Context:       api.NewGraphQLContext(nil, albert),
 	})

@@ -1,11 +1,6 @@
-package schema
+package api
 
-import (
-	"github.com/snapiz/go-vue-starter/api/common"
-	"github.com/snapiz/go-vue-starter/api/user"
-
-	"github.com/graphql-go/graphql"
-)
+import "github.com/graphql-go/graphql"
 
 // Schema defined in init()
 var Schema graphql.Schema
@@ -16,15 +11,15 @@ func init() {
 		Query: graphql.NewObject(graphql.ObjectConfig{
 			Name: "Query",
 			Fields: graphql.Fields{
-				"node": common.NodeDefinitions.NodeField,
-				"me":   user.MeQuery,
+				"node": nodeDefinitions.NodeField,
+				"me":   meQuery,
 			},
 		}),
 		Mutation: graphql.NewObject(graphql.ObjectConfig{
 			Name: "Mutation",
 			Fields: graphql.Fields{
-				"updateUser": user.UpdateUserMutation,
-				"changePassword": user.ChangePasswordMutation,
+				"updateUser":     updateUserMutation,
+				"changePassword": changePasswordMutation,
 			},
 		}),
 	})

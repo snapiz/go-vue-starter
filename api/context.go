@@ -1,4 +1,4 @@
-package common
+package api
 
 import (
 	"encoding/json"
@@ -19,8 +19,7 @@ type Context struct {
 
 type key int
 
-// ContextKeyID key
-const ContextKeyID key = 0
+const contextKeyID key = 0
 
 // Validator instance
 var Validator = validator.New()
@@ -61,7 +60,7 @@ func (c *Context) Validate(inputMap map[string]interface{}, s interface{}, cb fu
 // NewContext create graphql context
 func NewContext(c context.Context) (ctx Context) {
 	ctx = Context{
-		EchoCtx: c.Value(ContextKeyID).(echo.Context),
+		EchoCtx: c.Value(contextKeyID).(echo.Context),
 	}
 
 	if user := ctx.EchoCtx.Get("user"); user != nil {

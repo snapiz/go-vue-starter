@@ -1,14 +1,14 @@
 <template>
   <Page>
     <div class="register">
-      <form v-on:submit="register">
+      <form @submit.prevent="register">
         <label>Email</label>
-        <input type="text" v-model.trim="$v.email.$model" v-on:focus="error = '';">
+        <input type="text" v-model.trim="$v.email.$model" @focus="error = '';">
         <div class="error" v-if="$v.email.$dirty && !$v.email.required">Field is required</div>
         <div class="error" v-if="$v.email.$dirty && !$v.email.email">Must be en email</div>
 
         <label>Password</label>
-        <input type="password" v-model.trim="$v.password.$model" v-on:focus="error = '';">
+        <input type="password" v-model.trim="$v.password.$model" @focus="error = '';">
         <div class="error" v-if="$v.password.$dirty && !$v.password.required">Field is required</div>
         <div
           class="error"
@@ -88,9 +88,7 @@ export default {
     }
   },
   methods: {
-    async register(e) {
-      e.preventDefault();
-
+    async register() {
       this.$v.$touch();
 
       if (this.$v.$invalid) {

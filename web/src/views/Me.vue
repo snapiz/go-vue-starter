@@ -1,9 +1,9 @@
 <template>
   <Layout>
     <div class="me">
-      <form v-on:submit="update">
+      <form @submit.prevent="update">
         <label>Display name</label>
-        <input type="text" v-model.trim="$v.displayName.$model" v-on:focus="error = '';">
+        <input type="text" v-model.trim="$v.displayName.$model" @focus="error = '';">
         <div
           class="error"
           v-if="$v.displayName.$dirty && !$v.displayName.required"
@@ -18,7 +18,7 @@
         >Must be between 3 and 50 characters length</div>
 
         <label>Picture</label>
-        <input type="text" v-model.trim="$v.picture.$model" v-on:focus="error = '';">
+        <input type="text" v-model.trim="$v.picture.$model" @focus="error = '';">
         <div class="error" v-if="$v.picture.$dirty && !$v.picture.url">Must be valid URL</div>
 
         <div class="error" v-if="error">{{error}}</div>
@@ -27,16 +27,21 @@
       <div>
         <h3>Change password</h3>
       </div>
-      <form v-on:submit="changePassword">
+      <form @submit.prevent="changePassword">
         <label v-if="me.hasPassword">Current password</label>
-        <input v-if="me.hasPassword" type="password" v-model.trim="$v.currentPassword.$model" v-on:focus="errorPassword = '';">
+        <input
+          v-if="me.hasPassword"
+          type="password"
+          v-model.trim="$v.currentPassword.$model"
+          @focus="errorPassword = '';"
+        >
         <div
           class="error"
           v-if="$v.currentPassword.$dirty && (!$v.currentPassword.minLength || !$v.currentPassword.maxLength)"
         >Must be between 8 and 20 characters length</div>
 
         <label>New password</label>
-        <input type="password" v-model.trim="$v.password.$model" v-on:focus="errorPassword = '';">
+        <input type="password" v-model.trim="$v.password.$model" @focus="errorPassword = '';">
         <div class="error" v-if="$v.password.$dirty && !$v.password.required">Field is required</div>
         <div
           class="error"
@@ -111,15 +116,15 @@ export default {
     currentPassword: {
       minLength: minLength(8),
       maxLength: maxLength(20)
-    }
+    },
+    updateForm: ["displayName", "picture"],
+    passwordForm: ["password", "currentPassword"]
   },
   methods: {
-    async update(e) {
-      e.preventDefault();
+    async update() {
+      this.$v.updateForm.$touch();
 
-      this.$v.$touch();
-
-      if (this.$v.$invalid) {
+      if (this.$v.updateForm.$invalid) {
         return;
       }
 
@@ -151,15 +156,13 @@ export default {
           }
         });
       } catch (error) {
-        this.errorPassword = getGraphQLError(error);
+        this.error = getGraphQLError(error);
       }
     },
-    async changePassword(e) {
-      e.preventDefault();
+    async changePassword() {
+      this.$v.passwordForm.$touch();
 
-      this.$v.$touch();
-
-      if (this.$v.$invalid) {
+      if (this.$v.passwordForm.$invalid) {
         return;
       }
 

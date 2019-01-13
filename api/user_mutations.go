@@ -1,25 +1,22 @@
-package user
+package api
 
 import (
-	"github.com/snapiz/go-vue-starter/auth"
 	"context"
 	"net/http"
 	"time"
 
+	"github.com/snapiz/go-vue-starter/auth"
 	"github.com/snapiz/go-vue-starter/db/models"
-
-	"github.com/volatiletech/null"
-	"github.com/volatiletech/sqlboiler/boil"
+	"github.com/snapiz/go-vue-starter/db/services"
 
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/relay"
-	"github.com/snapiz/go-vue-starter/api/common"
-	com "github.com/snapiz/go-vue-starter/common"
+	"github.com/volatiletech/null"
+	"github.com/volatiletech/sqlboiler/boil"
 	validator "gopkg.in/go-playground/validator.v9"
 )
 
-// UpdateUserMutation update current user
-var UpdateUserMutation = relay.MutationWithClientMutationID(relay.MutationConfig{
+var updateUserMutation = relay.MutationWithClientMutationID(relay.MutationConfig{
 	Name: "UpdateUser",
 	InputFields: graphql.InputObjectConfigFieldMap{
 		"displayName": &graphql.InputObjectFieldConfig{
@@ -31,7 +28,7 @@ var UpdateUserMutation = relay.MutationWithClientMutationID(relay.MutationConfig
 	},
 	OutputFields: graphql.Fields{
 		"user": &graphql.Field{
-			Type: UserType,
+			Type: userType,
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				if payload, ok := p.Source.(map[string]interface{}); ok {
 					return payload["user"].(*models.User), nil
@@ -41,7 +38,7 @@ var UpdateUserMutation = relay.MutationWithClientMutationID(relay.MutationConfig
 		},
 	},
 	MutateAndGetPayload: func(inputMap map[string]interface{}, info graphql.ResolveInfo, ctx context.Context) (map[string]interface{}, error) {
-		c := common.NewContext(ctx)
+		c := NewContext(ctx)
 
 		c.EnsureIsAuthorized(nil)
 
@@ -76,8 +73,7 @@ var UpdateUserMutation = relay.MutationWithClientMutationID(relay.MutationConfig
 	},
 })
 
-// ChangePasswordMutation change current user password
-var ChangePasswordMutation = relay.MutationWithClientMutationID(relay.MutationConfig{
+var changePasswordMutation = relay.MutationWithClientMutationID(relay.MutationConfig{
 	Name: "ChangePassword",
 	InputFields: graphql.InputObjectConfigFieldMap{
 		"password": &graphql.InputObjectFieldConfig{
@@ -89,7 +85,7 @@ var ChangePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 	},
 	OutputFields: graphql.Fields{
 		"user": &graphql.Field{
-			Type: UserType,
+			Type: userType,
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				if payload, ok := p.Source.(map[string]interface{}); ok {
 					return payload["user"].(*models.User), nil
@@ -100,7 +96,7 @@ var ChangePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 		},
 	},
 	MutateAndGetPayload: func(inputMap map[string]interface{}, info graphql.ResolveInfo, ctx context.Context) (map[string]interface{}, error) {
-		c := common.NewContext(ctx)
+		c := NewContext(ctx)
 
 		c.EnsureIsAuthorized(nil)
 
@@ -119,27 +115,15 @@ var ChangePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 			return e.Translate(nil)
 		})
 
-		if c.User.Password.Ptr() != nil {
-			if ok, err := com.Verify(input.CurrentPassword, *c.User.Password.Ptr()); !ok || err != nil {
-				c.Panic(http.StatusBadRequest, "Bad password")
-			}
+		if c.User.Password.Ptr() != nil && !services.VerifyUserPassword(c.User, input.CurrentPassword) {
+			c.Panic(http.StatusBadRequest, "Bad password")
 		}
 
-		hash, err := com.Hash(input.Password)
-
-		if err != nil {
+		if err := services.SetUserPassword(c.User, input.Password); err != nil {
 			c.Panic(http.StatusInternalServerError, err.Error())
 		}
 
-		c.User.Password = null.StringFrom(hash)
-		c.User.TokenVersion = null.Int64From(time.Now().Unix())
-		_, err = c.User.UpdateG(boil.Whitelist("password", "token_version"))
-
-		if err != nil {
-			c.Panic(http.StatusInternalServerError, err.Error())
-		}
-
-		_, err = auth.SetToken(c.EchoCtx, *c.User)
+		auth.SetToken(c.EchoCtx, c.User)
 
 		return map[string]interface{}{
 			"user": c.User,

@@ -163,10 +163,10 @@ func OAuth2CallbackHandler(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("%s.", err.Error()))
 	}
 
-	var user models.User
+	var user *models.User
 
 	if users == nil {
-		user = models.User{
+		user = &models.User{
 			Email:        p.Email,
 			TokenVersion: null.Int64From(time.Now().Unix()),
 			DisplayName:  null.StringFrom(p.DisplayName),
@@ -179,7 +179,7 @@ func OAuth2CallbackHandler(c echo.Context) error {
 			return c.String(http.StatusInternalServerError, fmt.Sprintf("%s.", err.Error()))
 		}
 	} else {
-		user = *users[0]
+		user = users[0]
 	}
 
 	userProviders, err := models.UserProviders(qm.Where("provider = ? AND provider_id = ? AND user_id = ?", name, p.ID, user.ID)).AllG()

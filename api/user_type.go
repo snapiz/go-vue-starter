@@ -1,10 +1,9 @@
-package user
+package api
 
 import (
 	"strings"
 	"time"
 
-	"github.com/snapiz/go-vue-starter/api/common"
 	"github.com/snapiz/go-vue-starter/db/models"
 
 	"github.com/graphql-go/graphql"
@@ -31,8 +30,7 @@ var UserRoleType = graphql.NewEnum(graphql.EnumConfig{
 	},
 })
 
-// UserType graphql user type
-var UserType = graphql.NewObject(graphql.ObjectConfig{
+var userType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "User",
 	Fields: graphql.Fields{
 		"id": relay.GlobalIDField("User", nil),
@@ -92,6 +90,6 @@ var UserType = graphql.NewObject(graphql.ObjectConfig{
 		},
 	},
 	Interfaces: []*graphql.Interface{
-		common.NodeDefinitions.NodeInterface,
+		nodeDefinitions.NodeInterface,
 	},
 })

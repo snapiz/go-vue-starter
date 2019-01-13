@@ -1,4 +1,4 @@
-package common
+package api
 
 import (
 	"github.com/graphql-go/graphql"
@@ -6,8 +6,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-// NodeDefinitions node definition
-var NodeDefinitions = *relay.NewNodeDefinitions(relay.NodeDefinitionsConfig{
+var nodeDefinitions = *relay.NewNodeDefinitions(relay.NodeDefinitionsConfig{
 	IDFetcher: func(id string, info graphql.ResolveInfo, ctx context.Context) (interface{}, error) {
 		/* c := NewContext(ctx) */
 		// resolve id from global id
