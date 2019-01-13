@@ -23,5 +23,5 @@ func main() {
 
 	e.Any("/graphql", api.Handler, middlewares.JWT)
 
-	e.Logger.Fatal(e.Start(":" + os.Getenv("API_PORT")))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }

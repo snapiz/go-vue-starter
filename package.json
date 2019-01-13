@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run api & npm run serve",
-    "api": "go run server/server.go",
+    "api": "PORT=3000 go run server/server.go",
     "api-test": "APP_ENV=test go test github.com/snapiz/go-vue-starter/server/api",
     "db:up": "goose -path=server/db up",
     "db:down": "goose -path=server/db down",
