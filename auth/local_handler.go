@@ -49,23 +49,23 @@ var LocalHandler = func(c echo.Context) error {
 	}
 
 	if users == nil {
-		return c.JSON(http.StatusUnauthorized, "Invalid credentials.")
+		return c.JSON(http.StatusUnauthorized, "Invalid credentials")
 	}
 
 	user := *users[0]
 
 	if user.Password.Ptr() == nil {
-		return c.JSON(http.StatusUnauthorized, "Password not defined.")
+		return c.JSON(http.StatusUnauthorized, "Password not defined")
 	}
 
 	// Verify password
 	if ok, err := common.Verify(p.Password, *user.Password.Ptr()); !ok || err != nil {
-		return c.JSON(http.StatusUnauthorized, "Invalid credentials.")
+		return c.JSON(http.StatusUnauthorized, "Invalid credentials")
 	}
 
 	// Check account is disabled
 	if user.Role == models.UserRoleDisable {
-		return c.JSON(http.StatusUnauthorized, "Account disabled.")
+		return c.JSON(http.StatusUnauthorized, "Account disabled")
 	}
 
 	// write token into cookie

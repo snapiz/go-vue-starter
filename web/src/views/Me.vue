@@ -28,14 +28,14 @@
         <h3>Change password</h3>
       </div>
       <form v-on:submit="changePassword">
-        <label>Current password</label>
-        <input type="password" v-model.trim="$v.currentPassword.$model" v-on:focus="errorPassword = '';">
+        <label v-if="me.hasPassword">Current password</label>
+        <input v-if="me.hasPassword" type="password" v-model.trim="$v.currentPassword.$model" v-on:focus="errorPassword = '';">
         <div
           class="error"
           v-if="$v.currentPassword.$dirty && (!$v.currentPassword.minLength || !$v.currentPassword.maxLength)"
         >Must be between 8 and 20 characters length</div>
 
-        <label>Password</label>
+        <label>New password</label>
         <input type="password" v-model.trim="$v.password.$model" v-on:focus="errorPassword = '';">
         <div class="error" v-if="$v.password.$dirty && !$v.password.required">Field is required</div>
         <div
@@ -189,6 +189,11 @@ export default {
             }
           }
         });
+
+        this.me.hasPassword = true;
+        this.password = "";
+        this.currentPassword = "";
+        this.$v.$reset();
       } catch (error) {
         this.errorPassword = getGraphQLError(error);
       }

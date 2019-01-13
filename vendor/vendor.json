@@ -1,7 +1,7 @@
 {
 	"comment": "",
 	"heroku": {
-		"goVersion": "go1.11.1",
+		"goVersion": "go1.11.4",
 		"install": [
 			"./...",
 			"bitbucket.org/liamstask/goose/cmd/goose"

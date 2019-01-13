@@ -121,7 +121,7 @@ var ChangePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 
 		if c.User.Password.Ptr() != nil {
 			if ok, err := com.Verify(input.CurrentPassword, *c.User.Password.Ptr()); !ok || err != nil {
-				c.Panic(http.StatusUnauthorized, "Bad password")
+				c.Panic(http.StatusBadRequest, "Bad password")
 			}
 		}
 
