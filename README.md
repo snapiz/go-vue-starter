@@ -57,7 +57,7 @@ $ yarn db:models                        # Generate models from db
 ### How to Test
 
 ```bash
-$ yarn api-test                         # Run unit tests for server                          
+$ yarn test:api                         # Run unit tests for server                          
 $ yarn test:unit                        # Run unit tests.  
 $ yarn test:e2e                         # Run end-to-end tests.
 ```
@@ -67,9 +67,10 @@ $ yarn test:e2e                         # Run end-to-end tests.
 1.  Create a new heroku project and postgres database.
 2.  Configure heroku environement variables by running `heroku config:set APP_ENV=production` and for all variables in .env.
 3.  Deploy your application by running `yarn deploy`.
-4.  Update `/public/_redirects` with your own domain.
-5.  Build static files by running `yarn build`.
-6.  Finally, drag and drop dist to netlify deploy.
+4.  Migrate your database schema if needed by running `yarn heroku:db:up`.
+5.  Update `/public/_redirects` with your own domain.
+6.  Build static files by running `yarn build`.
+7.  Finally, drag and drop dist to netlify deploy.
 
 ### License
 
