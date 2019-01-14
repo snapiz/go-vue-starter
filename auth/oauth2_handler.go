@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/db/models"
 
 	"github.com/volatiletech/null"
 	"github.com/volatiletech/sqlboiler/boil"

@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/db/models"
 
 	"github.com/graphql-go/handler"
 	"github.com/labstack/echo"

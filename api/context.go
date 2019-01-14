@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/db/models"
 	validator "gopkg.in/go-playground/validator.v9"
 
 	"github.com/labstack/echo"
@@ -13,8 +13,8 @@ import (
 
 // Context graphql
 type Context struct {
-	EchoCtx  echo.Context
-	User     *models.User
+	EchoCtx echo.Context
+	User    *models.User
 }
 
 type key int

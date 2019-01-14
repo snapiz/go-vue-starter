@@ -7,9 +7,9 @@ import (
 
 	_ "github.com/bmizerany/pq"
 	"github.com/graphql-go/graphql"
-	"github.com/snapiz/go-vue-starter/server/api"
-	"github.com/snapiz/go-vue-starter/server/db"
-	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/api"
+	"github.com/snapiz/go-vue-starter/db"
+	"github.com/snapiz/go-vue-starter/db/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/volatiletech/sqlboiler/queries/qm"
 )

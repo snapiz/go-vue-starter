@@ -6,10 +6,10 @@ import (
 	_ "github.com/bmizerany/pq"
 	"github.com/labstack/echo"
 
-	"github.com/snapiz/go-vue-starter/server/api"
-	"github.com/snapiz/go-vue-starter/server/auth"
-	_ "github.com/snapiz/go-vue-starter/server/db"
-	"github.com/snapiz/go-vue-starter/server/middlewares"
+	"github.com/snapiz/go-vue-starter/api"
+	"github.com/snapiz/go-vue-starter/auth"
+	_ "github.com/snapiz/go-vue-starter/db"
+	"github.com/snapiz/go-vue-starter/middlewares"
 )
 
 func main() {

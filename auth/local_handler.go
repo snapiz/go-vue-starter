@@ -9,9 +9,9 @@ import (
 
 	"github.com/volatiletech/sqlboiler/queries/qm"
 
-	"github.com/snapiz/go-vue-starter/server/common"
-	"github.com/snapiz/go-vue-starter/server/db/models"
-	"github.com/snapiz/go-vue-starter/server/db/services"
+	"github.com/snapiz/go-vue-starter/common"
+	"github.com/snapiz/go-vue-starter/db/models"
+	"github.com/snapiz/go-vue-starter/db/services"
 
 	"github.com/labstack/echo"
 )

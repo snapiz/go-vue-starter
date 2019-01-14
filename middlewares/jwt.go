@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/snapiz/go-vue-starter/server/auth"
-	"github.com/snapiz/go-vue-starter/server/common"
-	"github.com/snapiz/go-vue-starter/server/db/models"
+	"github.com/snapiz/go-vue-starter/auth"
+	"github.com/snapiz/go-vue-starter/common"
+	"github.com/snapiz/go-vue-starter/db/models"
 
 	"github.com/volatiletech/sqlboiler/queries/qm"
 

@@ -26,13 +26,13 @@
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
-        "**/node_modules/**": true,
+        "**/web/node_modules/**": true,
         "**/vendor/**": true
     },
     "search.exclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
-        "**/node_modules": true,
+        "**/web/node_modules": true,
         "**/vendor/**": true
     }
 }

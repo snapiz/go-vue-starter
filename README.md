@@ -74,7 +74,7 @@ $ yarn test:e2e                         # Run end-to-end tests.
 ### License
 
 Copyright © 2019 snapiz. This source code is licensed under the MIT license found in
-the [LICENSE](https://github.com/snapiz/go-vue-starter/server/LICENSE) file.
+the [LICENSE](https://github.com/snapiz/go-vue-starter/LICENSE) file.
 
 ---
 
