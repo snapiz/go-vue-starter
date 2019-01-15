@@ -2,3 +2,18 @@
   base = "web"
   publish = "web/dist"
   command = "npm run build"
+
+[[redirects]]
+  from = "/auth/*"
+  to = "https://go-vue-starter.herokuapp.com/auth/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/graphql"
+  to = "https://go-vue-starter.herokuapp.com/graphql"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,4 +1,0 @@
-# Netlify settings for single-page application
-/auth/*  https://go-vue-starter.herokuapp.com/auth/:splat  200
-/graphql  https://go-vue-starter.herokuapp.com/graphql  200
-/*    /index.html   200
