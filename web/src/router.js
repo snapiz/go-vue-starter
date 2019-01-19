@@ -108,8 +108,6 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  const { acl } = to.meta;
-
   if (to.meta.query === false) {
     next();
 
@@ -149,20 +147,12 @@ router.beforeEach(async (to, from, next) => {
       )
     });
 
+    let { acl } = to.meta;
     const role = idx(resp, x => x.data.me.role);
     to.params.$data = resp.data || {};
 
     if (typeof acl === "undefined") {
-      if (role) {
-        next();
-      } else {
-        next({
-          path: "/login",
-          query: { redirect: to.fullPath }
-        });
-      }
-
-      return;
+      acl = ACL.ALL;
     }
 
     if (!acl) {
