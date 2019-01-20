@@ -6,9 +6,8 @@
   </Page>
 </template>
 
-
 <script>
-import Page from "@/components/Page.vue";
+import Page from "@/common/Page.vue";
 
 export default {
   name: "error",

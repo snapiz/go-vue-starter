@@ -3,19 +3,34 @@
     <div class="login">
       <form @submit.prevent="login">
         <label>Email</label>
-        <input type="text" v-model.trim="$v.email.$model" @focus="error = '';">
-        <div class="error" v-if="$v.email.$dirty && !$v.email.required">Field is required</div>
-        <div class="error" v-if="$v.email.$dirty && !$v.email.email">Must be en email</div>
+        <input type="text" v-model.trim="$v.email.$model" @focus="error = ''" />
+        <div class="error" v-if="$v.email.$dirty && !$v.email.required">
+          Field is required
+        </div>
+        <div class="error" v-if="$v.email.$dirty && !$v.email.email">
+          Must be en email
+        </div>
 
         <label>Password</label>
-        <input type="password" v-model.trim="$v.password.$model" @focus="error = '';">
-        <div class="error" v-if="$v.password.$dirty && !$v.password.required">Field is required</div>
+        <input
+          type="password"
+          v-model.trim="$v.password.$model"
+          @focus="error = ''"
+        />
+        <div class="error" v-if="$v.password.$dirty && !$v.password.required">
+          Field is required
+        </div>
         <div
           class="error"
-          v-if="$v.password.$dirty && (!$v.password.minLength || !$v.password.maxLength)"
-        >Must be between 8 and 20 characters length</div>
+          v-if="
+            $v.password.$dirty &&
+              (!$v.password.minLength || !$v.password.maxLength)
+          "
+        >
+          Must be between 8 and 20 characters length
+        </div>
 
-        <div class="error" v-if="error">{{error}}</div>
+        <div class="error" v-if="error">{{ error }}</div>
         <button type="submit">Login</button>
         <router-link tag="button" to="/register">Register</router-link>
       </form>
@@ -46,7 +61,6 @@ form button {
 }
 </style>
 
-
 <script>
 import {
   required,
@@ -56,9 +70,11 @@ import {
 } from "vuelidate/lib/validators";
 
 import axios from "axios";
-import Page from "@/components/Page.vue";
+import Page from "@/common/Page.vue";
+import RouterLink from "@/common/RouterLink.vue";
 import router from "@/router";
 import apollo from "@/apollo";
+import { getUrlParameter } from "@/utils";
 
 const winProviderOptions = {
   google: "width=452,height=633",
@@ -68,7 +84,8 @@ const winProviderOptions = {
 export default {
   name: "login",
   components: {
-    Page
+    Page,
+    RouterLink
   },
   data: () => ({
     email: "",
@@ -86,12 +103,10 @@ export default {
       maxLength: maxLength(20)
     }
   },
-  async beforeRouteEnter(to, from, next) {
+  async beforeRouteEnter() {
     try {
       await axios.post("/auth/logout");
       await apollo.resetStore();
-
-      next();
     } catch (error) {
       console.log("%cError logout", "color: orange;", error.message);
     }
@@ -110,7 +125,7 @@ export default {
         await axios.post("/auth/local", { email, password });
         await apollo.resetStore();
 
-        router.push(this.$route.query.redirect || "/");
+        router.context.history.push(getUrlParameter("redirect") || "/");
       } catch (error) {
         this.error = error.response.data;
       }

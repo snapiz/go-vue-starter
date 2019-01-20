@@ -1,185 +1,119 @@
-import Vue from "vue";
-import Router from "vue-router";
+import UniversalRouter from "universal-router";
 import gql from "graphql-tag";
 import { pick } from "lodash";
 import idx from "idx";
-import apollo from "./apollo";
+import createHistory from "history/createBrowserHistory";
 import { mergeQueries } from "./utils";
+import apollo from "./apollo";
+import pages from "./pages";
+import user from "./user";
+import ErrorPage from "./pages/Error.vue";
+import auth from "./auth";
 
-Vue.use(Router);
-
-const ACL = {
-  ADMIN: "ADMIN",
-  STAFF: ["STAFF", "ADMIN"],
-  ALL: ["ADMIN", "STAFF", "USER"],
-  ANONYME: false
-};
-
-const router = new Router({
-  mode: "history",
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      meta: {
-        query: gql`
-          {
-            me {
-              createdAt
-              email
-            }
-          }
-        `
-      },
-      component: () => import(/* webpackChunkName: "home" */ "./views/Home.vue")
-    },
-    {
-      path: "/me",
-      name: "me",
-      meta: {
-        query: gql`
-          {
-            me {
-              email
-              displayName
-              picture
-              hasPassword
-            }
-          }
-        `
-      },
-      component: () => import(/* webpackChunkName: "me" */ "./views/Me.vue")
-    },
-    {
-      path: "/login",
-      name: "login",
-      meta: { query: false },
-      component: () =>
-        import(/* webpackChunkName: "login" */ "./views/Login.vue")
-    },
-    {
-      path: "/register",
-      name: "register",
-      meta: { query: false },
-      component: () =>
-        import(/* webpackChunkName: "register" */ "./views/Register.vue")
-    },
-    {
-      path: "/about",
-      name: "about",
-      meta: {
-        acl: ACL.ANONYME
-      },
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
-    },
-    {
-      path: "/forbidden",
-      name: "forbidden",
-      meta: { query: false },
-      component: () =>
-        import(/* webpackChunkName: "forbidden" */ "./views/Forbidden.vue")
-    },
-    {
-      path: "/error",
-      name: "error",
-      meta: { query: false },
-      component: () =>
-        import(/* webpackChunkName: "error" */ "./views/Error.vue")
-    },
-    {
-      path: "*",
-      name: "notFound",
-      meta: { query: false },
-      component: () =>
-        import(/* webpackChunkName: "not-found" */ "./views/NotFound.vue")
+const globalQuery = gql`
+  {
+    me {
+      id
+      displayName
+      role
     }
-  ]
-});
+  }
+`;
 
-router.beforeEach(async (to, from, next) => {
-  to.params.$data = {};
+const routes = [...pages, ...user];
+
+function resolveRoute(ctx) {
+  const { route, next } = ctx;
+  const acl = typeof route.acl === "undefined" ? auth.USER : route.acl;
+
+  if (typeof route.children === "function") {
+    return route.children().then(x => {
+      route.children = x.default;
+      return next();
+    });
+  }
+
+  if (typeof route.title === "undefined") {
+    return next();
+  }
 
   if (window.opener) {
-    window.opener.postMessage("login_success");
+    window.opener.postMessage({ key: "login_success" });
     window.close();
 
     return;
   }
 
-  if (to.meta.query === false) {
-    next();
+  const componentPromise = route.component
+    ? route.component().then(x => x.default)
+    : null;
 
-    return;
-  }
+  const dataPromise =
+    route.query !== false
+      ? apollo.query({
+          query: mergeQueries(globalQuery, route.query),
+          fetchPolicy: "no-cache",
+          ...pick(
+            route.queryOptions || {},
+            "children",
+            "variables",
+            "pollInterval",
+            "notifyOnNetworkStatusChange",
+            "fetchPolicy",
+            "errorPolicy",
+            "ssr",
+            "displayName",
+            "skip",
+            "onCompleted",
+            "onError",
+            "context",
+            "partialRefetch"
+          )
+        })
+      : Promise.resolve({ me: {} });
 
-  try {
-    const resp = await apollo.query({
-      query: mergeQueries(
-        gql`
-          {
-            me {
-              id
-              displayName
-              role
-            }
-          }
-        `,
-        to.meta.query
-      ),
-      fetchPolicy: "no-cache",
-      ...pick(
-        to.meta,
-        "children",
-        "variables",
-        "pollInterval",
-        "notifyOnNetworkStatusChange",
-        "fetchPolicy",
-        "errorPolicy",
-        "ssr",
-        "displayName",
-        "skip",
-        "onCompleted",
-        "onError",
-        "context",
-        "partialRefetch"
-      )
-    });
+  return Promise.all([componentPromise, dataPromise]).then(
+    ([component, resp]) => {
+      const { title } = route;
+      const { data } = resp;
 
-    let { acl } = to.meta;
-    const role = idx(resp, x => x.data.me.role);
-    to.params.$data = resp.data || {};
+      if (acl) {
+        const role = idx(resp, x => x.data.me.role);
+        const redirectLogin = encodeURIComponent(route.path || "/");
 
-    if (typeof acl === "undefined") {
-      acl = ACL.ALL;
+        if (!role) {
+          return {
+            redirect: `/login?redirect=${redirectLogin}`,
+            ctx
+          };
+        }
+
+        if (acl.indexOf(role) === -1) {
+          return errorHandler(new Error("Forbidden"), ctx);
+        }
+      }
+
+      return component ? { component, data, title, ctx } : next();
     }
+  );
+}
 
-    if (!acl) {
-      next();
+function errorHandler(error, ctx) {
+  return {
+    title: "Error",
+    component: ErrorPage,
+    data: {
+      error
+    },
+    ctx
+  };
+}
 
-      return;
-    }
+const history = createHistory();
+const options = {
+  resolveRoute,
+  errorHandler,
+  context: { history }
+};
 
-    if (!role) {
-      next({
-        path: "/login",
-        query: { redirect: to.fullPath }
-      });
-
-      return;
-    }
-
-    if (acl.indexOf(role) === -1) {
-      next("/forbidden");
-
-      return;
-    }
-
-    next();
-  } catch (error) {
-    next({ path: "/error" });
-  }
-});
-
-export default router;
+export default new UniversalRouter(routes, options);

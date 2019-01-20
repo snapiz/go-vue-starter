@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout v-bind:me="me">
     <div class="home">
       <h1>This is an home page</h1>
     </div>
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Layout from "@/components/Layout.vue";
+import Layout from "@/common/Layout.vue";
 
 export default {
   name: "home",

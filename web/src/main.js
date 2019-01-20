@@ -1,24 +1,20 @@
 import Vue from "vue";
 import Vuelidate from "vuelidate";
 
-import App from "./App.vue";
 import router from "./router";
-import store from "./store";
-import VueRouteData from "./vue-route-data";
+import App from "./App.vue";
+import { getUrlParameter } from "./utils";
 
 window.addEventListener("message", e => {
-  if (e.data === "login_success") {
-    router.push(router.currentRoute.query.redirect || "/");
+  if (e.data.key === "login_success") {
+    router.context.history.push(getUrlParameter("redirect") || "/");
   }
 });
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
-Vue.use(VueRouteData);
 
 new Vue({
-  router,
-  store,
   render: h => h(App)
 }).$mount("#app");

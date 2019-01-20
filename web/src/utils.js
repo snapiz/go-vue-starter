@@ -68,3 +68,12 @@ function mergeTwoQueries(q1, q2, n) {
 export function getGraphQLError(error) {
   return idx(error, x => x.networkError.result.errors[0].message) || "";
 }
+
+export function getUrlParameter(name) {
+  name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+  var results = regex.exec(location.search);
+  return results === null
+    ? ""
+    : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
