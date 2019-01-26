@@ -1,3 +1,9 @@
+<style>
+body {
+  background-color: #fafafa;
+}
+</style>
+
 <template>
   <AppRender />
 </template>

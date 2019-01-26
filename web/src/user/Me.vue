@@ -1,10 +1,10 @@
 <template>
   <Layout v-bind:me="me">
     <div id="me">
-      <sui-divider horizontal>Profile</sui-divider>
+      <sui-divider horizontal>{{ "user_me_header_1" | t }}</sui-divider>
       <sui-form id="profile-form" @submit.prevent="update">
         <sui-form-field>
-          <label>Display name</label>
+          <label>{{ "user_me_form_label_display_name" | t }}</label>
           <sui-input
             v-model.trim="$v.displayName.$model"
             icon="user"
@@ -15,13 +15,13 @@
             class="error"
             v-if="$v.displayName.$dirty && !$v.displayName.required"
           >
-            Field is required
+            {{ "form_error_required" | t }}
           </div>
           <div
             class="error"
             v-if="$v.displayName.$dirty && !$v.displayName.alphaNum"
           >
-            Must be alpha numeric
+            {{ "form_error_alpha_numeric" | t }}
           </div>
           <div
             class="error"
@@ -30,12 +30,12 @@
                 (!$v.displayName.minLength || !$v.displayName.maxLength)
             "
           >
-            Must be between 3 and 50 characters length
+            {{ "form_error_between" | t({ min: 3, max: 50 }) }}
           </div>
         </sui-form-field>
 
         <sui-form-field>
-          <label>Picture</label>
+          <label>{{ "user_me_form_label_picture" | t }}</label>
           <sui-input
             v-model.trim="$v.picture.$model"
             icon="image"
@@ -43,17 +43,19 @@
             @focus="error = ''"
           />
           <div class="error" v-if="$v.picture.$dirty && !$v.picture.url">
-            Must be valid URL
+            {{ "form_error_url" | t }}
           </div>
         </sui-form-field>
 
-        <div class="error" v-if="error">{{ error }}</div>
-        <sui-button type="submit">Update</sui-button>
+        <div class="error" v-if="error">{{ error | t }}</div>
+        <sui-button type="submit">{{ "user_me_submit" | t }}</sui-button>
       </sui-form>
-      <sui-divider horizontal>Change password</sui-divider>
+      <sui-divider horizontal>{{ "user_me_header_2" | t }}</sui-divider>
       <sui-form @submit.prevent="changePassword">
         <sui-form-field>
-          <label v-if="me.hasPassword">Current password</label>
+          <label v-if="me.hasPassword">{{
+            "user_me_form_label_current_password" | t
+          }}</label>
           <sui-input
             v-if="me.hasPassword"
             type="password"
@@ -69,12 +71,12 @@
                 (!$v.currentPassword.minLength || !$v.currentPassword.maxLength)
             "
           >
-            Must be between 8 and 20 characters length
+            {{ "form_error_between" | t({ min: 8, max: 20 }) }}
           </div>
         </sui-form-field>
 
         <sui-form-field>
-          <label>New password</label>
+          <label>{{ "user_me_form_label_new_password" | t }}</label>
           <sui-input
             type="password"
             v-model.trim="$v.password.$model"
@@ -83,7 +85,7 @@
             @focus="errorPassword = ''"
           />
           <div class="error" v-if="$v.password.$dirty && !$v.password.required">
-            Field is required
+            {{ "form_error_required" | t }}
           </div>
           <div
             class="error"
@@ -92,12 +94,12 @@
                 (!$v.password.minLength || !$v.password.maxLength)
             "
           >
-            Must be between 8 and 20 characters length
+            {{ "form_error_between" | t({ min: 8, max: 20 }) }}
           </div>
         </sui-form-field>
 
-        <div class="error" v-if="errorPassword">{{ errorPassword }}</div>
-        <sui-button type="submit">Change password</sui-button>
+        <div class="error" v-if="errorPassword">{{ errorPassword | t }}</div>
+        <sui-button type="submit">{{ "user_me_submit" | t }}</sui-button>
       </sui-form>
     </div>
   </Layout>
@@ -121,7 +123,7 @@
 }
 .ui.form,
 .ui.horizontal.divider {
-  min-width: 300px;
+  width: 300px;
 }
 #profile-form {
   margin-bottom: 15px;

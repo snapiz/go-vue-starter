@@ -48,7 +48,8 @@ export default {
         }
 
         if (title) {
-          window.document.title = title;
+          window.document.title =
+            this.$i18n.i18next.t(title, route.data) || title;
         }
 
         const promise = component.beforeRouteEnter

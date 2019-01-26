@@ -108,19 +108,11 @@ var RegisterHandler = func(c echo.Context) error {
 	}
 
 	if users != nil {
-		return c.JSON(http.StatusBadRequest, "Email already exists.")
+		return c.JSON(http.StatusBadRequest, "Email already exists")
 	}
-
-	/* hash, err := common.Hash(p.Password)
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, fmt.Sprintln(err))
-	} */
 
 	user := &models.User{
 		Email: p.Email,
-		/* Password:     null.StringFrom(hash),
-		TokenVersion: null.Int64From(time.Now().Unix()), */
 	}
 
 	if err := services.SetUserPassword(user, p.Password); err != nil {

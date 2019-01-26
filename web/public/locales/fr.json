@@ -1,0 +1,41 @@
+{
+	"Identifiants non valides": "Identifiants non valides",
+	"Mot de passe non défini": "Mot de passe non défini",
+	"Compte désactivé": "Compte désactivé",
+	"Email existe déjà": "Email existe déjà",
+
+	"form_label_email": "Email",
+	"form_label_password": "Mot de passe",
+	"form_error_required": "Ce champ est obligatoire",
+	"form_error_email": "Ce champ doit être un email",
+	"form_error_between": "Ce champ doit avoir une longueur comprise entre {{min}} et {{max}} caractères",
+	"form_error_alpha_numeric": "Ce champ doit être alphanumérique",
+	"form_error_url": "Ce champ doit être une URL valide",
+
+	"common_layout_nav_home": "Accueil",
+	"common_layout_nav_about": "À propos de",
+	"common_layout_nav_me": "Moi",
+	"common_layout_nav_login": "Connexion",
+	"common_layout_nav_logout": "Déconnexion",
+
+	"pages_home_header": "Ceci est une page d'accueil",
+	"pages_about_header": "Ceci est une page à propos",
+	"pages_error_header": "Ceci est une page d'erreur",
+
+	"user_login_header": "Connectez-vous avec votre compte",
+	"user_login_new_account": "Je n'ai pas de compte",
+	"user_login_submit": "Login",
+	"user_login_divider": "Ou",
+
+	"user_register_header": "Créez votre nouveau compte",
+	"user_register_login": "J'ai déjà un compte",
+	"user_register_submit": "Enregistrer",
+
+	"user_me_header_1": "Profil",
+	"user_me_header_2": "Changer le mot de passe",
+	"user_me_submit": "Mettre à jour",
+	"user_me_form_label_display_name": "Nom d'affichage",
+	"user_me_form_label_picture": "Image",
+	"user_me_form_label_current_password": "Mot de passe actuel",
+	"user_me_form_label_new_password": "Nouveau mot de passe"
+}

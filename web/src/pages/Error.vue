@@ -1,7 +1,7 @@
 <template>
   <Page>
     <div class="error">
-      <h1>This is an error page</h1>
+      <h1>{{ "pages_error_header" | t }}</h1>
     </div>
   </Page>
 </template>

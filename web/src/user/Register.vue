@@ -1,10 +1,10 @@
 <template>
   <Page>
     <div id="register">
-      <h3>Create your new account</h3>
+      <h3>{{ "user_register_header" | t }}</h3>
       <sui-form @submit.prevent="register">
         <sui-form-field>
-          <label>Email</label>
+          <label>{{ "form_label_email" | t }}</label>
           <sui-input
             v-model.trim="$v.email.$model"
             icon="user"
@@ -12,14 +12,14 @@
             icon-position="left"
           />
           <div class="error" v-if="$v.email.$dirty && !$v.email.required">
-            Field is required
+            {{ "form_error_required" | t }}
           </div>
           <div class="error" v-if="$v.email.$dirty && !$v.email.email">
-            Must be en email
+            {{ "form_error_email" | t }}
           </div>
         </sui-form-field>
         <sui-form-field>
-          <label>Password</label>
+          <label>{{ "form_label_password" | t }}</label>
           <sui-input
             type="password"
             v-model.trim="$v.password.$model"
@@ -28,7 +28,7 @@
             @focus="error = ''"
           />
           <div class="error" v-if="$v.password.$dirty && !$v.password.required">
-            Field is required
+            {{ "form_error_required" | t }}
           </div>
           <div
             class="error"
@@ -37,13 +37,13 @@
                 (!$v.password.minLength || !$v.password.maxLength)
             "
           >
-            Must be between 8 and 20 characters length
+            {{ "form_error_between" | t({ min: 8, max: 20 }) }}
           </div>
         </sui-form-field>
 
-        <div class="error" v-if="error">{{ error }}</div>
-        <router-link to="/login">I already have an account</router-link>
-        <sui-button type="submit">Register</sui-button>
+        <div class="error" v-if="error">{{ error | t }}</div>
+        <router-link to="/login">{{ "user_register_login" | t }}</router-link>
+        <sui-button type="submit">{{ "user_register_submit" | t }}</sui-button>
       </sui-form>
     </div>
   </Page>
@@ -67,7 +67,7 @@
 }
 .ui.form,
 .ui.horizontal.divider {
-  min-width: 300px;
+  width: 300px;
 }
 .error {
   color: red;

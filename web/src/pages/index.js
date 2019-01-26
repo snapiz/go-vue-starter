@@ -2,6 +2,7 @@ export default [
   {
     path: "",
     title: "Go vue starter - Home",
+    acl: false,
     component: () => import(/* webpackChunkName: 'home' */ "./Home")
   },
   {

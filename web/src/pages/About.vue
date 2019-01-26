@@ -1,7 +1,7 @@
 <template>
   <Layout v-bind:me="me">
     <div class="about">
-      <h1>This is an about page</h1>
+      <h1>{{ "pages_about_header" | t }}</h1>
     </div>
   </Layout>
 </template>
