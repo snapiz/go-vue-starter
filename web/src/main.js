@@ -25,7 +25,6 @@ Vue.use(SuiVue);
 
 async function start() {
   await i18next.use(i18nextFetchBackend).init({
-    lng: "fr",
     whitelist: ["en", "fr"],
     load: "languageOnly",
     fallbackLng: "en",
