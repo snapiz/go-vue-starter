@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuelidate from "vuelidate";
 import SuiVue from "semantic-ui-vue";
 import i18next from "i18next";
+import LngDetector from "i18next-browser-languagedetector";
 import i18nextFetchBackend from "i18next-fetch-backend";
 import VueI18Next from "@panter/vue-i18next";
 
@@ -24,14 +25,17 @@ Vue.use(Vuelidate);
 Vue.use(SuiVue);
 
 async function start() {
-  await i18next.use(i18nextFetchBackend).init({
-    whitelist: ["en", "fr"],
-    load: "languageOnly",
-    fallbackLng: "en",
-    backend: {
-      loadPath: "locales/{{lng}}.json"
-    }
-  });
+  await i18next
+    .use(LngDetector)
+    .use(i18nextFetchBackend)
+    .init({
+      whitelist: ["en", "fr"],
+      load: "languageOnly",
+      fallbackLng: "en",
+      backend: {
+        loadPath: "locales/{{lng}}.json"
+      }
+    });
 
   Vue.filter("t", (value, args) => (value && i18next.t(value, args)) || "");
 

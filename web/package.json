@@ -20,6 +20,7 @@
     "graphql-tag": "^2.10.0",
     "history": "^4.7.2",
     "i18next": "^14.0.1",
+    "i18next-browser-languagedetector": "^2.2.4",
     "i18next-fetch-backend": "^2.0.0",
     "idx": "^2.5.2",
     "lodash": "^4.17.11",
