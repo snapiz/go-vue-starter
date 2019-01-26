@@ -1,60 +1,83 @@
 <template>
   <Page>
-    <div class="login">
-      <form @submit.prevent="login">
-        <label>Email</label>
-        <input type="text" v-model.trim="$v.email.$model" @focus="error = ''" />
-        <div class="error" v-if="$v.email.$dirty && !$v.email.required">
-          Field is required
-        </div>
-        <div class="error" v-if="$v.email.$dirty && !$v.email.email">
-          Must be en email
-        </div>
+    <div id="login">
+      <h3>Login with your account</h3>
+      <sui-form @submit.prevent="login">
+        <sui-form-field>
+          <label>Email</label>
+          <sui-input
+            v-model.trim="$v.email.$model"
+            icon="user"
+            @focus="error = ''"
+            icon-position="left"
+          />
+          <div class="error" v-if="$v.email.$dirty && !$v.email.required">
+            Field is required
+          </div>
+          <div class="error" v-if="$v.email.$dirty && !$v.email.email">
+            Must be en email
+          </div>
+        </sui-form-field>
 
-        <label>Password</label>
-        <input
-          type="password"
-          v-model.trim="$v.password.$model"
-          @focus="error = ''"
-        />
-        <div class="error" v-if="$v.password.$dirty && !$v.password.required">
-          Field is required
-        </div>
-        <div
-          class="error"
-          v-if="
-            $v.password.$dirty &&
-              (!$v.password.minLength || !$v.password.maxLength)
-          "
-        >
-          Must be between 8 and 20 characters length
-        </div>
-
+        <sui-form-field>
+          <label>Password</label>
+          <sui-input
+            type="password"
+            v-model.trim="$v.password.$model"
+            icon="lock"
+            icon-position="left"
+            @focus="error = ''"
+          />
+          <div class="error" v-if="$v.password.$dirty && !$v.password.required">
+            Field is required
+          </div>
+          <div
+            class="error"
+            v-if="
+              $v.password.$dirty &&
+                (!$v.password.minLength || !$v.password.maxLength)
+            "
+          >
+            Must be between 8 and 20 characters length
+          </div>
+        </sui-form-field>
         <div class="error" v-if="error">{{ error }}</div>
-        <button type="submit">Login</button>
-        <router-link tag="button" to="/register">Register</router-link>
-      </form>
-      <div>
-        <button @click="loginOauth2('google')">Google</button>
-        <button @click="loginOauth2('facebook')">Facebook</button>
+        <router-link to="/register">I don't have an account</router-link>
+        <sui-button type="submit">Login</sui-button>
+      </sui-form>
+      <sui-divider horizontal>Or</sui-divider>
+      <div class="socials">
+        <sui-button icon="google" @click="loginOauth2('google')"
+          >Google</sui-button
+        >
+        <sui-button icon="facebook" @click="loginOauth2('facebook')"
+          >Facebook</sui-button
+        >
       </div>
     </div>
   </Page>
 </template>
 
 <style scoped>
-form {
-  display: inline-block;
-  margin: 0 auto;
+#login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
-input,
-form button {
-  display: block;
-  margin: 15px 0;
-  padding: 5px;
+.ui.form {
+  background-color: white;
+  padding: 15px;
 }
-form button {
-  float: right;
+.ui.button {
+  width: 100%;
+  margin-top: 15px;
+}
+.socials,
+.ui.form,
+.ui.horizontal.divider {
+  min-width: 300px;
 }
 .error {
   color: red;

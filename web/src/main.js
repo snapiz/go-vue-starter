@@ -1,5 +1,8 @@
 import Vue from "vue";
 import Vuelidate from "vuelidate";
+import SuiVue from "semantic-ui-vue";
+
+import "semantic-ui-css/semantic.min.css";
 
 import router from "./router";
 import App from "./App.vue";
@@ -14,6 +17,7 @@ window.addEventListener("message", e => {
 Vue.config.productionTip = false;
 
 Vue.use(Vuelidate);
+Vue.use(SuiVue);
 
 new Vue({
   render: h => h(App)

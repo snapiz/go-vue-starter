@@ -1,5 +1,3 @@
-import auth from "../auth";
-
 export default [
   {
     path: "",
@@ -9,7 +7,6 @@ export default [
   {
     path: "/about",
     title: "Go vue starter - About",
-    acl: auth.STAFF,
     component: () => import(/* webpackChunkName: 'home' */ "./About")
   }
 ];

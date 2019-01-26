@@ -15,6 +15,7 @@ const globalQuery = gql`
     me {
       id
       displayName
+      picture
       role
     }
   }

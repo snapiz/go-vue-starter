@@ -1,7 +1,7 @@
 <template>
-  <component :is="tag" @click="go" v-bind="currentAttrs">
+  <a @click="go" v-bind="currentAttrs">
     <slot></slot>
-  </component>
+  </a>
 </template>
 
 <script>

@@ -1,108 +1,130 @@
 <template>
   <Layout v-bind:me="me">
-    <div class="me">
-      <form @submit.prevent="update">
-        <label>Display name</label>
-        <input
-          type="text"
-          v-model.trim="$v.displayName.$model"
-          @focus="error = ''"
-        />
-        <div
-          class="error"
-          v-if="$v.displayName.$dirty && !$v.displayName.required"
-        >
-          Field is required
-        </div>
-        <div
-          class="error"
-          v-if="$v.displayName.$dirty && !$v.displayName.alphaNum"
-        >
-          Must be alpha numeric
-        </div>
-        <div
-          class="error"
-          v-if="
-            $v.displayName.$dirty &&
-              (!$v.displayName.minLength || !$v.displayName.maxLength)
-          "
-        >
-          Must be between 3 and 50 characters length
-        </div>
+    <div id="me">
+      <sui-divider horizontal>Profile</sui-divider>
+      <sui-form id="profile-form" @submit.prevent="update">
+        <sui-form-field>
+          <label>Display name</label>
+          <sui-input
+            v-model.trim="$v.displayName.$model"
+            icon="user"
+            icon-position="left"
+            @focus="error = ''"
+          />
+          <div
+            class="error"
+            v-if="$v.displayName.$dirty && !$v.displayName.required"
+          >
+            Field is required
+          </div>
+          <div
+            class="error"
+            v-if="$v.displayName.$dirty && !$v.displayName.alphaNum"
+          >
+            Must be alpha numeric
+          </div>
+          <div
+            class="error"
+            v-if="
+              $v.displayName.$dirty &&
+                (!$v.displayName.minLength || !$v.displayName.maxLength)
+            "
+          >
+            Must be between 3 and 50 characters length
+          </div>
+        </sui-form-field>
 
-        <label>Picture</label>
-        <input
-          type="text"
-          v-model.trim="$v.picture.$model"
-          @focus="error = ''"
-        />
-        <div class="error" v-if="$v.picture.$dirty && !$v.picture.url">
-          Must be valid URL
-        </div>
+        <sui-form-field>
+          <label>Picture</label>
+          <sui-input
+            v-model.trim="$v.picture.$model"
+            icon="image"
+            icon-position="left"
+            @focus="error = ''"
+          />
+          <div class="error" v-if="$v.picture.$dirty && !$v.picture.url">
+            Must be valid URL
+          </div>
+        </sui-form-field>
 
         <div class="error" v-if="error">{{ error }}</div>
-        <button type="submit">Update</button>
-      </form>
-      <div>
-        <h3>Change password</h3>
-      </div>
-      <form @submit.prevent="changePassword">
-        <label v-if="me.hasPassword">Current password</label>
-        <input
-          v-if="me.hasPassword"
-          type="password"
-          v-model.trim="$v.currentPassword.$model"
-          @focus="errorPassword = ''"
-        />
-        <div
-          class="error"
-          v-if="
-            $v.currentPassword.$dirty &&
-              (!$v.currentPassword.minLength || !$v.currentPassword.maxLength)
-          "
-        >
-          Must be between 8 and 20 characters length
-        </div>
+        <sui-button type="submit">Update</sui-button>
+      </sui-form>
+      <sui-divider horizontal>Change password</sui-divider>
+      <sui-form @submit.prevent="changePassword">
+        <sui-form-field>
+          <label v-if="me.hasPassword">Current password</label>
+          <sui-input
+            v-if="me.hasPassword"
+            type="password"
+            v-model.trim="$v.currentPassword.$model"
+            icon="lock"
+            icon-position="left"
+            @focus="errorPassword = ''"
+          />
+          <div
+            class="error"
+            v-if="
+              $v.currentPassword.$dirty &&
+                (!$v.currentPassword.minLength || !$v.currentPassword.maxLength)
+            "
+          >
+            Must be between 8 and 20 characters length
+          </div>
+        </sui-form-field>
 
-        <label>New password</label>
-        <input
-          type="password"
-          v-model.trim="$v.password.$model"
-          @focus="errorPassword = ''"
-        />
-        <div class="error" v-if="$v.password.$dirty && !$v.password.required">
-          Field is required
-        </div>
-        <div
-          class="error"
-          v-if="
-            $v.password.$dirty &&
-              (!$v.password.minLength || !$v.password.maxLength)
-          "
-        >
-          Must be between 8 and 20 characters length
-        </div>
+        <sui-form-field>
+          <label>New password</label>
+          <sui-input
+            type="password"
+            v-model.trim="$v.password.$model"
+            icon="lock"
+            icon-position="left"
+            @focus="errorPassword = ''"
+          />
+          <div class="error" v-if="$v.password.$dirty && !$v.password.required">
+            Field is required
+          </div>
+          <div
+            class="error"
+            v-if="
+              $v.password.$dirty &&
+                (!$v.password.minLength || !$v.password.maxLength)
+            "
+          >
+            Must be between 8 and 20 characters length
+          </div>
+        </sui-form-field>
 
         <div class="error" v-if="errorPassword">{{ errorPassword }}</div>
-        <button type="submit">Change password</button>
-      </form>
+        <sui-button type="submit">Change password</sui-button>
+      </sui-form>
     </div>
   </Layout>
 </template>
 
 <style scoped>
-form {
-  display: inline-block;
-  margin: 0 auto;
+#me {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px);
 }
-input,
-form button {
-  display: block;
-  margin: 15px 0;
-  padding: 5px;
+.ui.form {
+  background-color: white;
+  padding: 15px;
 }
-form button {
-  float: right;
+.ui.button {
+  width: 100%;
+  margin-top: 15px;
+}
+.ui.form,
+.ui.horizontal.divider {
+  min-width: 300px;
+}
+#profile-form {
+  margin-bottom: 15px;
 }
 .error {
   color: red;
