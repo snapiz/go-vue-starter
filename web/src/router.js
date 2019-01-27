@@ -21,7 +21,15 @@ const globalQuery = gql`
   }
 `;
 
-const routes = [...pages, ...user];
+export function createHref(to) {
+  const basename = (process.env.BASE_URL || "/").replace(/\/$/i, "");
+
+  if (basename && to === "/") {
+    to = "";
+  }
+
+  return `${basename}${to}`;
+}
 
 function resolveRoute(ctx) {
   const { route, next } = ctx;
@@ -116,5 +124,10 @@ const options = {
   errorHandler,
   context: { history }
 };
+
+const routes = [...pages, ...user].map(x => ({
+  ...x,
+  path: createHref(x.path)
+}));
 
 export default new UniversalRouter(routes, options);

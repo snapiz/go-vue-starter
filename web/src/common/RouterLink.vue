@@ -1,11 +1,11 @@
 <template>
-  <a @click="go" v-bind="currentAttrs">
+  <a @click="go" v-bind:href="href">
     <slot></slot>
   </a>
 </template>
 
 <script>
-import router from "@/router";
+import router, { createHref } from "@/router";
 
 function isLeftClickEvent(event) {
   return event.button === 0;
@@ -15,25 +15,20 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
+const { history } = router.context;
+
 export default {
   name: "router-link",
   data() {
-    let currentAttrs = {
-      ...this.$attrs
+    return {
+      href: createHref(this.to)
     };
-
-    if (this.tag === "a") {
-      currentAttrs.href = this.to;
-    }
-
-    return { currentAttrs };
   },
   props: {
-    tag: {
-      type: String,
-      default: "a"
-    },
     to: String
+  },
+  mounted() {
+    this.$el.removeAttribute("to");
   },
   methods: {
     go(event) {
@@ -46,7 +41,7 @@ export default {
       }
 
       event.preventDefault();
-      router.context.history.push(this.to);
+      history.push(this.href);
     }
   }
 };
