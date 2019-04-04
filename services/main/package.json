@@ -1,0 +1,21 @@
+{
+  "name": "@gvs-services/main",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "db:migration": "go run ../../cli/* db:migration",
+    "db:models": "GO_ENV=dev go run ../../cli/* db:models",
+    "d:u": "go run ../../cli/* db:up",
+    "d:d": "go run ../../cli/* db:down",
+    "d:s": "go run ../../cli/* db:setup",
+    "db:setup": "GO_ENV=dev yarn d:s",
+    "db:up": "GO_ENV=dev yarn d:u",
+    "db:down": "GO_ENV=dev yarn d:d",
+    "test:db:setup": "GO_ENV=test yarn d:s",
+    "test:db:up": "GO_ENV=test yarn d:u",
+    "test:db:down": "GO_ENV=test yarn d:d",
+    "prod:db:setup": "GO_ENV=prod yarn d:s",
+    "prod:db:up": "GO_ENV=prod yarn d:u"
+  }
+}
