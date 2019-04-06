@@ -154,7 +154,7 @@ var changePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 		c.Password = u.Password
 		c.TokenVersion = u.TokenVersion
 
-		utils.SetToken(c)
+		c.CreateToken()
 
 		return map[string]interface{}{
 			"user": c,

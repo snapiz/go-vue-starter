@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/volatiletech/sqlboiler/queries/qm"
+
 	"github.com/graphql-go/graphql"
 
 	"github.com/gorilla/mux"
@@ -13,12 +15,12 @@ import (
 
 // ServiceConfig using for configure local dev server
 type ServiceConfig struct {
-	Name   string
-	Schema graphql.Schema
-	Before func(Context) Context
+	Name    string
+	Schema  graphql.Schema
+	FetchUser func(qm.QueryMod) (interface{}, error)
 }
 
-func graphqlHandler(config handler.Config, w http.ResponseWriter, r *http.Request, before func(Context) Context) {
+func graphqlHandler(config handler.Config, w http.ResponseWriter, r *http.Request, fetchUser func(qm.QueryMod) (interface{}, error)) {
 	h := handler.New(&config)
 
 	c := Context{
@@ -26,27 +28,27 @@ func graphqlHandler(config handler.Config, w http.ResponseWriter, r *http.Reques
 		Request:  r,
 	}
 
-	if before != nil {
-		c = before(c)
-	}
-
+	c.SetHost()
+	c.SetUser(fetchUser)
 	ctx := NewContext(c)
 	h.ContextHandler(ctx, w, r)
 }
 
 // Start local dev server
-func Start(services []ServiceConfig) {
+func Start(service ServiceConfig, before func(*mux.Router)) {
 	r := mux.NewRouter()
-	s := r.PathPrefix("/api").Subrouter()
+	s := r.PathPrefix("/" + service.Name).Subrouter()
 
-	for _, service := range services {
-		s.HandleFunc("/"+service.Name, func(w http.ResponseWriter, r *http.Request) {
-			graphqlHandler(handler.Config{
-				Schema:   &service.Schema,
-				GraphiQL: true,
-			}, w, r, service.Before)
-		})
+	if before != nil {
+		before(s)
 	}
+
+	s.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		graphqlHandler(handler.Config{
+			Schema:   &service.Schema,
+			GraphiQL: true,
+		}, w, r, service.FetchUser)
+	})
 
 	http.Handle("/", r)
 

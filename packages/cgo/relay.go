@@ -3,11 +3,11 @@ package cgo
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/volatiletech/sqlboiler/queries/qm"
@@ -26,14 +26,6 @@ func FromGlobalID(globalID string) *relay.ResolvedGlobalID {
 	resolvedID.ID = id
 
 	return resolvedID
-}
-
-func structoMap(v interface{}) map[string]interface{} {
-	var objMap interface{}
-	b, _ := json.Marshal(v)
-	_ = json.Unmarshal(b, &objMap)
-
-	return objMap.(map[string]interface{})
 }
 
 func encodeID(id interface{}) (string, error) {
@@ -59,8 +51,8 @@ func decodeID(id string) (string, error) {
 // GlobalIDField short uuid
 func GlobalIDField(name string) *graphql.Field {
 	return relay.GlobalIDField(name, func(obj interface{}, info graphql.ResolveInfo, ctx context.Context) (string, error) {
-		o := structoMap(obj)
-		id, _ := o["id"]
+		id := reflect.ValueOf(obj).Elem().FieldByName("ID").String()
+
 		return encodeID(id)
 	})
 }
@@ -93,11 +85,10 @@ func getSelectedFields(selectionPath []string,
 }
 
 func toCursor(v interface{}) string {
-	o := structoMap(v)
-	id, _ := o["id"]
+	id := reflect.ValueOf(v).Elem().FieldByName("ID").String()
 	id, _ = encodeID(id)
-	createdAt, _ := o["created_at"]
-	cursor := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%v|%v", id, createdAt)))
+	createdAt := reflect.ValueOf(v).Elem().FieldByName("CreatedAt").Interface().(time.Time)
+	cursor := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%v|%v", id, createdAt.Format(time.RFC3339))))
 	return cursor
 }
 

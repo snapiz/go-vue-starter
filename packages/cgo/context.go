@@ -7,10 +7,15 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
+	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/volatiletech/null"
+	"github.com/volatiletech/sqlboiler/queries/qm"
 	validator "gopkg.in/go-playground/validator.v9"
 )
 
@@ -115,19 +120,58 @@ func (c *Context) Validate(inputMap map[string]interface{}, s interface{}, cb fu
 	}
 }
 
-// NewContext create context.Context from Context
-func NewContext(c Context) context.Context {
-	if c.Request == nil {
-		c.Request = httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
-		c.Request.Header.Set("Content-Type", "application/json")
-	}
-	if c.Response == nil {
-		c.Response = httptest.NewRecorder()
-	}
-	if c.Params == nil {
-		c.Params = map[string]string{}
+const (
+	sessionExpireDuraction = "SESSION_EXPIRE_DURATION"
+	sessionKey             = "SESSION_KEY"
+)
+
+// CreateToken cookie for user
+func (c *Context) CreateToken() (token string, err error) {
+	expireDuration, err := time.ParseDuration(os.Getenv(sessionExpireDuraction))
+
+	if err != nil {
+		return "", err
 	}
 
+	token, err = SignToken(jwt.StandardClaims{
+		Id:      c.ID,
+		Subject: strconv.FormatInt(*c.TokenVersion.Ptr(), 10),
+		Issuer:  c.Host,
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	cookie := &http.Cookie{
+		Name:     os.Getenv(sessionKey),
+		Value:    token,
+		Expires:  time.Now().Add(expireDuration),
+		HttpOnly: true,
+		Path:     "/",
+	}
+
+	http.SetCookie(c.Response, cookie)
+
+	return token, nil
+}
+
+// RemoveToken unset token from cookie
+func (c *Context) RemoveToken() {
+	cookie := &http.Cookie{
+		Name:     os.Getenv(sessionKey),
+		Value:    "",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		Path:     "/",
+	}
+
+	c.Response.Header().Del("Set-Cookie")
+	http.SetCookie(c.Response, cookie)
+}
+
+// SetHost set current host using refere as default
+func (c *Context) SetHost() {
 	r := c.Request
 	scheme := "https"
 	referer := r.Referer()
@@ -141,6 +185,62 @@ func NewContext(c Context) context.Context {
 		c.Host = fmt.Sprintf("%s://%s", scheme, r.Host)
 	} else {
 		c.Host = fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+	}
+}
+
+// SetUser fetch and bind user properties to context
+func (c *Context) SetUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
+	authCookie, err := c.Request.Cookie(os.Getenv(sessionKey))
+
+	if err != nil {
+		return
+	}
+
+	claims, err := VerifyToken(authCookie.Value, c.Host)
+
+	if err != nil {
+		c.Panic(http.StatusInternalServerError, "failed to verify token")
+	}
+
+	u, err := fetchUser(qm.Where("id = ? AND token_version = ? AND state != 'disable'", claims.Id, claims.Subject))
+
+	if err != nil {
+		c.Panic(http.StatusInternalServerError, "failed to fetch user")
+	}
+
+	if u == nil {
+		c.RemoveToken()
+		return
+	}
+
+	user := reflect.ValueOf(u).Elem()
+	c.ID = user.FieldByName("ID").String()
+	c.Email = user.FieldByName("Email").String()
+	c.EmailHash = user.FieldByName("EmailHash").String()
+	c.Username = user.FieldByName("Username").Interface().(null.String)
+	c.Password = user.FieldByName("Password").Interface().(null.String)
+	c.TokenVersion = user.FieldByName("TokenVersion").Interface().(null.Int64)
+	c.Picture = user.FieldByName("Picture").Interface().(null.String)
+	c.DisplayName = user.FieldByName("DisplayName").Interface().(null.String)
+	c.State = user.FieldByName("State").String()
+	c.Role = user.FieldByName("Role").String()
+	c.CreatedAt = user.FieldByName("CreatedAt").Interface().(time.Time)
+	c.UpdatedAt = user.FieldByName("UpdatedAt").Interface().(null.Time)
+
+	c.CreateToken()
+}
+
+// NewContext create context.Context from Context
+func NewContext(c Context) context.Context {
+	if c.Request == nil {
+		c.Request = httptest.NewRequest(http.MethodPost, "/", strings.NewReader("{}"))
+		c.Request.Header.Set("Content-Type", "application/json")
+	}
+	if c.Response == nil {
+		c.Response = httptest.NewRecorder()
+	}
+	if c.Params == nil {
+		c.Params = map[string]string{}
 	}
 
 	ctx := context.Background()

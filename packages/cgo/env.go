@@ -20,9 +20,9 @@ func loadEnv() {
 	}
 
 	godotenv.Load(".env." + env)
-	err := godotenv.Load()
+	godotenv.Load(".env.local")
 
-	if env == "test" && err != nil {
+	if err := godotenv.Load(); env == "test" && err != nil {
 		wd, err := os.Getwd()
 		if err != nil {
 			panic(err)
