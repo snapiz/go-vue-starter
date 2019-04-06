@@ -51,7 +51,7 @@ func decodeID(id string) (string, error) {
 // GlobalIDField short uuid
 func GlobalIDField(name string) *graphql.Field {
 	return relay.GlobalIDField(name, func(obj interface{}, info graphql.ResolveInfo, ctx context.Context) (string, error) {
-		id := reflect.ValueOf(obj).Elem().FieldByName("ID").String()
+		id := reflect.ValueOf(obj).FieldByName("ID").String()
 
 		return encodeID(id)
 	})

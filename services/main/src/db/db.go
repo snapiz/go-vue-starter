@@ -33,9 +33,9 @@ func init() {
 	}
 
 	if os.Getenv("GO_ENV") == "test" {
-		Fixtures, err = testfixtures.NewFolder(DB, &testfixtures.PostgreSQL{
+		Fixtures, err = testfixtures.NewFiles(DB, &testfixtures.PostgreSQL{
 			SkipResetSequences: true,
-		}, "fixtures")
+		}, "../../fixtures/users.yml")
 
 		if err != nil {
 			log.Fatal(err)
