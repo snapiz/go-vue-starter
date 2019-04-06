@@ -3,11 +3,16 @@ package cgo
 import (
 	"go/build"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
 
 func init() {
+	loadEnv()
+}
+
+func loadEnv() {
 	env := os.Getenv("GO_ENV")
 
 	if env == "" {
@@ -15,7 +20,17 @@ func init() {
 	}
 
 	godotenv.Load(".env." + env)
-	godotenv.Load()
+	err := godotenv.Load()
+
+	if env == "test" && err != nil {
+		wd, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+		parent := filepath.Dir(wd)
+		os.Chdir(parent)
+		loadEnv()
+	}
 }
 
 // GetGOPath Get $GOPATH or default build

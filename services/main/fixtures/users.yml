@@ -1,0 +1,25 @@
+- id: 4c9f32df-c112-4d02-a459-3493fac49ea9
+  email: john@doe.com
+  email_hash: 6a6c19fea4a3676970167ce51f39e6ee
+  role: user
+  token_version: 1546097186
+  created_at: 2016-01-01 12:30:12
+  updated_at: 2016-01-01 12:30:12
+
+- id: 04231367-deef-4444-bc41-529281445b5f
+  email: albert@dupont.com
+  email_hash: 58a1cb05c9a75b272003cd6e4b4dc543
+  username: albert
+  password: $argon2id$v=19$m=65536,t=3,p=2$XEqhUPoyTftr1HQZ7/p0dA$CvX5+Et7e+QlgvwjrK2J7bFtBODhDjTuIoh5wJlDCl4
+  role: staff
+  token_version: 1546097186
+  created_at: 2016-01-01 12:30:12
+
+- id: 46646622-465d-4246-ace2-7f77d54a2af3
+  email: admin@admin.com
+  email_hash: 64e1b8d34f425d19e1ee2ea7236d3028
+  username: admin
+  password: $argon2id$v=19$m=65536,t=3,p=2$XEqhUPoyTftr1HQZ7/p0dA$CvX5+Et7e+QlgvwjrK2J7bFtBODhDjTuIoh5wJlDCl4
+  role: admin
+  token_version: 1546097186
+  created_at: 2016-01-01 12:30:12

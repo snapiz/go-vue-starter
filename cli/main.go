@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	_ "github.com/lib/pq"
 	_ "github.com/snapiz/go-vue-starter/packages/cgo"
 	"github.com/spf13/cobra"
 )

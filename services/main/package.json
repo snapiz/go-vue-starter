@@ -6,6 +6,8 @@
   "scripts": {
     "cli": "GO_ENV=dev go run ../../cli/*",
     "cli:test": "GO_ENV=test go run ../../cli/*",
-    "cli:prod": "GO_ENV=prod go run ../../cli/*"
+    "cli:prod": "GO_ENV=prod go run ../../cli/*",
+    "start": "GO_ENV=dev go run src/server/*",
+    "test": "GO_ENV=test go test ./..."
   }
 }

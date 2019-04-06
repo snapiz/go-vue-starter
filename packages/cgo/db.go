@@ -5,6 +5,9 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	// import psql driver
+	_ "github.com/lib/pq"
 )
 
 var dbnameRegex = regexp.MustCompile(`dbname=([a-zA-Z_0-9]+)`)
