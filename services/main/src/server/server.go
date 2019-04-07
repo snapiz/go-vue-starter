@@ -69,7 +69,7 @@ func main() {
 				Request:      r,
 				Response:     w,
 			}
-			c.SetHost()
+			c.Host = "http://localhost:9000"
 			c.CreateToken()
 
 			w.WriteHeader(http.StatusOK)

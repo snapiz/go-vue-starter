@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "history": "^4.9.0",
+    "lodash": "^4.17.11",
     "universal-router": "^8.1.0",
     "vue": "^2.6.6"
   },

@@ -1,6 +1,8 @@
 import UniversalRouter from "universal-router";
+import { createBrowserHistory } from "history";
 import resolveRoute from "./resolve-route";
 import errorHandler from "./error-handler";
+import RouterLink from "../components/RouterLink";
 
 export function install(Vue, options) {
   if (install.installed) {
@@ -9,8 +11,8 @@ export function install(Vue, options) {
 
   install.installed = true;
 
-  const { router, apollo } = options;
-  const { routes, baseUrl, ...context } = router;
+  const { router, apollo, history: h } = options;
+  const { routes, baseUrl, notFoundPage, ...context } = router;
 
   if (!apollo.defaultOptions) {
     const defaultKey = Object.keys(apollo)[0];
@@ -24,12 +26,27 @@ export function install(Vue, options) {
     Vue.prototype.$apollo = apollo;
   }
 
+  const history = createBrowserHistory(h);
+
+  routes.push({
+    path: "(.*)",
+    title: "404 Not found",
+    apollo: false,
+    component: notFoundPage
+  });
+
+  Vue.prototype.$render = function() {
+    this.$root.$emit("vue-apollo-router:render");
+  };
+
   Vue.prototype.$router = new UniversalRouter(routes, {
     baseUrl,
-    context: { ...context, apollo: Vue.prototype.$apollo },
+    context: { Vue, ...context, history, apollo: Vue.prototype.$apollo },
     resolveRoute,
     errorHandler
   });
+
+  Vue.component("router-link", RouterLink);
 }
 
 export default {
