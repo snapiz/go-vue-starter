@@ -1,11 +1,18 @@
 {
   "name": "@gvs/vue-apollo-router",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "main": "index.common.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snapiz/go-vue-starter"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build": "vue-cli-service build -p --progress --target lib --name index ./src/lib/index.js",
+    "lint": "vue-cli-service lint",
+    "prepublish": "node scripts/prepublish.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
