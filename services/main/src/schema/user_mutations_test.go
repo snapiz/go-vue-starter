@@ -3,6 +3,7 @@ package schema
 import (
 	"testing"
 
+	"github.com/snapiz/go-vue-starter/packages/tgo"
 	"github.com/snapiz/go-vue-starter/services/main/src/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/volatiletech/sqlboiler/queries/qm"
@@ -39,7 +40,7 @@ func TestUpdateUser_AnonymousAccessShouldBeDenied(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        anonymous,
+		Context:        tgo.Anonymous,
 		VariableValues: params,
 	})
 
@@ -79,7 +80,7 @@ func TestUpdateUser_DisplayNameShouldBeInvalid(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -117,7 +118,7 @@ func TestUpdateUser_DisplayNameShouldBeInvalid(t *testing.T) {
 	result = graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -157,7 +158,7 @@ func TestUpdateUser_PictureShouldBeInvalid(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -198,7 +199,7 @@ func TestUpdateUser_UsernameAlreadyExists(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -239,7 +240,7 @@ func TestUpdateUser_UsernameShouldBeInvalid(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -278,7 +279,7 @@ func TestUpdateUser_UsernameShouldBeInvalid(t *testing.T) {
 	result = graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -317,7 +318,7 @@ func TestUpdateUser_UsernameShouldBeInvalid(t *testing.T) {
 	result = graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -358,7 +359,7 @@ func TestUpdateUser_ShouldNotBeAbleToUpdateUsername(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        albert,
+		Context:        tgo.Albert,
 		VariableValues: params,
 	})
 
@@ -405,7 +406,7 @@ func TestUpdateUser_ShouldUpdateUser(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -443,7 +444,7 @@ func TestUpdateUser_ShouldUpdateUser(t *testing.T) {
 	result = graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -478,7 +479,7 @@ func TestChangePassword_AnonymousAccessShouldBeDenied(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        anonymous,
+		Context:        tgo.Anonymous,
 		VariableValues: params,
 	})
 
@@ -517,7 +518,7 @@ func TestChangePassword_ShouldNotUpdateInvalidPassword(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -554,7 +555,7 @@ func TestChangePassword_ShouldNotUpdateInvalidPassword(t *testing.T) {
 	result = graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -593,7 +594,7 @@ func TestChangePassword_ShouldNotUpdateBadPassword(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        albert,
+		Context:        tgo.Albert,
 		VariableValues: params,
 	})
 
@@ -641,7 +642,7 @@ func TestChangePassword_ShouldUpdatePasswordWithoutCurrent(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
@@ -685,7 +686,7 @@ func TestChangePassword_ShouldUpdatePassword(t *testing.T) {
 	result := graphql.Do(graphql.Params{
 		Schema:         Schema,
 		RequestString:  query,
-		Context:        john,
+		Context:        tgo.John,
 		VariableValues: params,
 	})
 
