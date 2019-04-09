@@ -4,6 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "m-cli": "GO_ENV=dev go run cli/*",
     "cli": "GO_ENV=dev go run ../../cli/*",
     "cli:test": "GO_ENV=test go run ../../cli/*",
     "cli:prod": "GO_ENV=prod go run ../../cli/*",
