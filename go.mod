@@ -3,7 +3,6 @@ module github.com/snapiz/go-vue-starter
 go 1.12
 
 require (
-	github.com/Gomada-org/gomada v0.0.0-20190317162240-dc5b725ee54e
 	github.com/aws/aws-lambda-go v1.10.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.2.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -28,6 +27,7 @@ require (
 	golang.org/x/crypto v0.0.0-20190404164418-38d8ce5564a5
 	golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
+	gopkg.in/go-playground/validator.v8 v8.18.2
 	gopkg.in/go-playground/validator.v9 v9.28.0
 	gopkg.in/testfixtures.v2 v2.5.3
 )

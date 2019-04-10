@@ -1,4 +1,4 @@
-package schema
+package api
 
 import (
 	"github.com/graphql-go/graphql"

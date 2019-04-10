@@ -1,7 +1,6 @@
 cloud.google.com/go v0.33.1/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/Gomada-org/gomada v0.0.0-20190317162240-dc5b725ee54e h1:97eC4ZubRF7bPNbGleS03+9Yw0dJKVVh/d2nF/Ur3f0=
-github.com/Gomada-org/gomada v0.0.0-20190317162240-dc5b725ee54e/go.mod h1:eT//BCD+kpQ45dn3iEr56WZQ85tG4j04BhnB01XQCHU=
 github.com/aws/aws-lambda-go v1.10.0 h1:uafgdfYGQD0UeT7d2uKdyWW8j/ZYRifRPIdmeqLzLCk=
 github.com/aws/aws-lambda-go v1.10.0/go.mod h1:zUsUQhAUjYzR8AuduJPCfhBuKWUaDbQiPOG+ouzmE1A=
 github.com/awslabs/aws-lambda-go-api-proxy v0.2.0 h1:rlPO5+qdErTggV9EVXU3x+mZkX7zWwG9xL6tmX+1c+8=

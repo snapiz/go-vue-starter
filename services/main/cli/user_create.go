@@ -1,14 +1,11 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"log"
 
-	"github.com/snapiz/go-vue-starter/services/main/src/utils"
 	"github.com/volatiletech/null"
-	"github.com/volatiletech/sqlboiler/boil"
 
+	"github.com/snapiz/go-vue-starter/services/main/src/db"
 	"github.com/snapiz/go-vue-starter/services/main/src/models"
 	"github.com/spf13/cobra"
 )
@@ -23,17 +20,14 @@ func init() {
 		Use:   "user:create",
 		Short: "Create user",
 		Run: func(cmd *cobra.Command, args []string) {
-			hash := md5.Sum([]byte(email))
-			u := &models.User{
-				Email:     email,
-				EmailHash: hex.EncodeToString(hash[:]),
-				Username:  null.StringFrom(username),
-				Role:      role,
+			user := &models.User{
+				Email:    email,
+				Username: null.StringFrom(username),
+				Role:     role,
+				Password: null.StringFrom(password),
 			}
-			utils.SetUserPassword(u, password)
-			err := u.InsertG(boil.Whitelist("email", "email_hash", "username", "password", "role", "token_version"))
 
-			if err != nil {
+			if err := db.CreateUser(user); err != nil {
 				log.Fatal(err)
 			}
 		},

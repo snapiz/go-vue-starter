@@ -93,6 +93,11 @@ func (c *Context) Param(key string) string {
 	return c.Params[key]
 }
 
+// Query return value by key of query parameters
+func (c *Context) Query(key string) string {
+	return c.Request.URL.Query().Get(key)
+}
+
 // EnsureIsAuthorized verify if is authorized
 func (c *Context) EnsureIsAuthorized(cb func() bool) {
 	if c.ID == "" {
@@ -106,6 +111,14 @@ func (c *Context) EnsureIsAuthorized(cb func() bool) {
 
 // Validate struct
 func (c *Context) Validate(inputMap map[string]interface{}, s interface{}, cb func(err validator.FieldError) string) {
+	if inputMap == nil {
+		inputMap = map[string]interface{}{}
+
+		for k, v := range c.Params {
+			inputMap[k] = v
+		}
+	}
+
 	jsonString, _ := json.Marshal(inputMap)
 	json.Unmarshal(jsonString, &s)
 
@@ -189,7 +202,26 @@ func (c *Context) SetHost() {
 }
 
 // SetUser fetch and bind user properties to context
-func (c *Context) SetUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
+func (c *Context) SetUser(u interface{}) (string, error) {
+	user := reflect.ValueOf(u).Elem()
+	c.ID = user.FieldByName("ID").String()
+	c.Email = user.FieldByName("Email").String()
+	c.EmailHash = user.FieldByName("EmailHash").String()
+	c.Username = user.FieldByName("Username").Interface().(null.String)
+	c.Password = user.FieldByName("Password").Interface().(null.String)
+	c.TokenVersion = user.FieldByName("TokenVersion").Interface().(null.Int64)
+	c.Picture = user.FieldByName("Picture").Interface().(null.String)
+	c.DisplayName = user.FieldByName("DisplayName").Interface().(null.String)
+	c.State = user.FieldByName("State").String()
+	c.Role = user.FieldByName("Role").String()
+	c.CreatedAt = user.FieldByName("CreatedAt").Interface().(time.Time)
+	c.UpdatedAt = user.FieldByName("UpdatedAt").Interface().(null.Time)
+
+	return c.CreateToken()
+}
+
+// FetchUser fetch user and update context properties
+func (c *Context) FetchUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
 	authCookie, err := c.Request.Cookie(os.Getenv(sessionKey))
 
 	if err != nil {
@@ -213,21 +245,7 @@ func (c *Context) SetUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
 		return
 	}
 
-	user := reflect.ValueOf(u).Elem()
-	c.ID = user.FieldByName("ID").String()
-	c.Email = user.FieldByName("Email").String()
-	c.EmailHash = user.FieldByName("EmailHash").String()
-	c.Username = user.FieldByName("Username").Interface().(null.String)
-	c.Password = user.FieldByName("Password").Interface().(null.String)
-	c.TokenVersion = user.FieldByName("TokenVersion").Interface().(null.Int64)
-	c.Picture = user.FieldByName("Picture").Interface().(null.String)
-	c.DisplayName = user.FieldByName("DisplayName").Interface().(null.String)
-	c.State = user.FieldByName("State").String()
-	c.Role = user.FieldByName("Role").String()
-	c.CreatedAt = user.FieldByName("CreatedAt").Interface().(time.Time)
-	c.UpdatedAt = user.FieldByName("UpdatedAt").Interface().(null.Time)
-
-	c.CreateToken()
+	c.SetUser(u)
 }
 
 // NewContext create context.Context from Context

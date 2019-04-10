@@ -1,4 +1,4 @@
-package schema
+package api
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/snapiz/go-vue-starter/packages/cgo"
+	"github.com/snapiz/go-vue-starter/services/main/src/db"
 	"github.com/snapiz/go-vue-starter/services/main/src/models"
-	"github.com/snapiz/go-vue-starter/services/main/src/utils"
 	"github.com/volatiletech/sqlboiler/queries/qm"
 
 	"github.com/graphql-go/graphql"
@@ -135,15 +135,16 @@ var changePasswordMutation = relay.MutationWithClientMutationID(relay.MutationCo
 			return e.Translate(nil)
 		})
 
-		if c.Password.Ptr() != nil && !utils.VerifyUserPassword(*c.Password.Ptr(), input.CurrentPassword) {
+		if c.Password.Ptr() != nil && !db.VerifyUserPassword(*c.Password.Ptr(), input.CurrentPassword) {
 			c.Panic(http.StatusBadRequest, "errors.user.badPassword")
 		}
 
 		u := &models.User{
-			ID: c.ID,
+			ID:       c.ID,
+			Password: null.StringFrom(input.Password),
 		}
 
-		if err := utils.SetUserPassword(u, input.Password); err != nil {
+		if err := db.HashUserPassword(u); err != nil {
 			c.Panic(http.StatusInternalServerError, err.Error())
 		}
 
