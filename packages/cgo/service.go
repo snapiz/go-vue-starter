@@ -5,18 +5,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/volatiletech/sqlboiler/queries/qm"
-
 	"github.com/gorilla/mux"
 )
 
 // Start local dev server
-func Start(fetchUser func(qm.QueryMod) (interface{}, error), fn func(*Router)) {
+func Start(fn func(*Router)) {
 	r := mux.NewRouter()
 
 	fn(&Router{
 		Router: r,
-		FetchUser: fetchUser,
 	})
 
 	http.Handle("/", r)

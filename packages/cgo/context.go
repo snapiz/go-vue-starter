@@ -97,7 +97,7 @@ func (c *Context) Param(key string) string {
 func (c *Context) Redirect(url string) (map[string]interface{}, error) {
 	return map[string]interface{}{
 		"_location": url,
-		"_code": http.StatusTemporaryRedirect,
+		"_code":     http.StatusTemporaryRedirect,
 	}, nil
 }
 

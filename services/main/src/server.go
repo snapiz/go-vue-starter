@@ -10,22 +10,23 @@ import (
 )
 
 func main() {
-	cgo.Start(func(queryMod qm.QueryMod) (interface{}, error) {
-		users, err := models.Users(queryMod).AllG()
-
-		if err != nil {
-			return nil, err
-		}
-
-		if users == nil {
-			return nil, nil
-		}
-
-		return users[0], nil
-	}, func(r *cgo.Router) {
+	cgo.Start(func(r *cgo.Router) {
 		r.Add(&cgo.RouteConfig{
 			Path:   "/main/api",
 			Schema: &api.Schema,
+			FetchUser: func(queryMod qm.QueryMod) (interface{}, error) {
+				users, err := models.Users(queryMod).AllG()
+		
+				if err != nil {
+					return nil, err
+				}
+		
+				if users == nil {
+					return nil, nil
+				}
+		
+				return users[0], nil
+			},
 		})
 
 		r.Add(&cgo.RouteConfig{

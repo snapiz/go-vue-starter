@@ -48,7 +48,11 @@ func restHandler(handlerFunc func(context Context) (map[string]interface{}, erro
 	}
 
 	c.SetHost()
-	c.FetchUser(fetchUser)
+
+	if fetchUser != nil {
+		c.FetchUser(fetchUser)
+	}
+
 	c.Params = mux.Vars(r)
 
 	for k := range r.URL.Query() {
@@ -90,6 +94,8 @@ type RouteConfig struct {
 	Path        string
 	Schema      *graphql.Schema
 	HandlerFunc func(context Context) (map[string]interface{}, error)
+	FetchUser func(qm.QueryMod) (interface{}, error)
+
 }
 
 // Router using for configure server
@@ -105,9 +111,9 @@ func (r *Router) Add(config *RouteConfig) *mux.Route {
 			graphqlHandler(handler.Config{
 				Schema:   config.Schema,
 				GraphiQL: true,
-			}, w, req, r.FetchUser)
+			}, w, req, config.FetchUser)
 		} else {
-			restHandler(config.HandlerFunc, w, req, r.FetchUser)
+			restHandler(config.HandlerFunc, w, req, config.FetchUser)
 		}
 	})
 }
