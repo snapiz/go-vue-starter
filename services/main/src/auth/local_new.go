@@ -23,24 +23,18 @@ func LocalNewHandler(context cgo.Context) (map[string]interface{}, error) {
 		return "errors.auth.missingFields"
 	})
 
-	users, err := models.Users(qm.Where("email = ?", input.Email)).AllG()
+	users, err := models.Users(qm.Where("email = ? or username = ?", input.Email, input.Username)).AllG()
 
 	if err != nil {
-		context.Panic(http.StatusInternalServerError, "Failed to fetch user by email")
+		context.Panic(http.StatusInternalServerError, "Failed to fetch user by email or username")
 	}
 
 	if users != nil {
-		context.Panic(http.StatusBadRequest, "errors.auth.emailAlreadyExists")
-	}
-
-	users, err = models.Users(qm.Where("username = ?", input.Username)).AllG()
-
-	if err != nil {
-		context.Panic(http.StatusInternalServerError, "Failed to fetch user by username")
-	}
-
-	if users != nil {
-		context.Panic(http.StatusBadRequest, "errors.auth.usernameAlreadyExists")
+		if users[0].Email == input.Email {
+			context.Panic(http.StatusBadRequest, "errors.auth.emailAlreadyExists")
+		} else {
+			context.Panic(http.StatusBadRequest, "errors.auth.usernameAlreadyExists")
+		}
 	}
 
 	user := &models.User{

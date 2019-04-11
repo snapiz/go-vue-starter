@@ -93,11 +93,6 @@ func (c *Context) Param(key string) string {
 	return c.Params[key]
 }
 
-// Query return value by key of query parameters
-func (c *Context) Query(key string) string {
-	return c.Request.URL.Query().Get(key)
-}
-
 // EnsureIsAuthorized verify if is authorized
 func (c *Context) EnsureIsAuthorized(cb func() bool) {
 	if c.ID == "" {

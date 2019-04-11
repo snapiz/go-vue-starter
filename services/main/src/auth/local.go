@@ -21,10 +21,10 @@ func LocalHandler(context cgo.Context) (map[string]interface{}, error) {
 		return "errors.auth.missingFields"
 	})
 
-	users, err := models.Users(qm.Where("email = ?", input.Login), qm.Or("username = ?", input.Login)).AllG()
+	users, err := models.Users(qm.Where("email = ? or username = ?", input.Login, input.Login)).AllG()
 
 	if err != nil {
-		context.Panic(http.StatusInternalServerError, "Falied to request user")
+		context.Panic(http.StatusInternalServerError, "Failed to request user")
 	}
 
 	if users == nil {
