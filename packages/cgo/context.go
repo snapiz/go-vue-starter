@@ -93,6 +93,14 @@ func (c *Context) Param(key string) string {
 	return c.Params[key]
 }
 
+// Redirect to URL
+func (c *Context) Redirect(url string) (map[string]interface{}, error) {
+	return map[string]interface{}{
+		"_location": url,
+		"_code": http.StatusTemporaryRedirect,
+	}, nil
+}
+
 // EnsureIsAuthorized verify if is authorized
 func (c *Context) EnsureIsAuthorized(cb func() bool) {
 	if c.ID == "" {

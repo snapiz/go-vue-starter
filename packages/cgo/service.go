@@ -11,11 +11,11 @@ import (
 )
 
 // Start local dev server
-func Start(baseURL string, fetchUser func(qm.QueryMod) (interface{}, error), fn func(*Router)) {
+func Start(fetchUser func(qm.QueryMod) (interface{}, error), fn func(*Router)) {
 	r := mux.NewRouter()
 
 	fn(&Router{
-		Router: r.PathPrefix(baseURL).Subrouter(),
+		Router: r,
 		FetchUser: fetchUser,
 	})
 

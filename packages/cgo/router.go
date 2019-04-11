@@ -62,6 +62,17 @@ func restHandler(handlerFunc func(context Context) (map[string]interface{}, erro
 		return
 	}
 
+	if url, ok := resp["_location"]; ok {
+		var statusCode = http.StatusTemporaryRedirect
+
+		if code, ok := resp["_code"]; ok {
+			statusCode = code.(int)
+		}
+
+		http.Redirect(w, r, url.(string), statusCode)
+		return
+	}
+
 	jsonData, err := json.Marshal(resp)
 
 	if err != nil {

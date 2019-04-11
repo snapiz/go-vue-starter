@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	cgo.Start("/main", func(queryMod qm.QueryMod) (interface{}, error) {
+	cgo.Start(func(queryMod qm.QueryMod) (interface{}, error) {
 		users, err := models.Users(queryMod).AllG()
 
 		if err != nil {
@@ -24,7 +24,7 @@ func main() {
 		return users[0], nil
 	}, func(r *cgo.Router) {
 		r.Add(&cgo.RouteConfig{
-			Path:   "/api",
+			Path:   "/main/api",
 			Schema: &api.Schema,
 		})
 
@@ -41,6 +41,16 @@ func main() {
 		r.Add(&cgo.RouteConfig{
 			Path:        "/auth/logout",
 			HandlerFunc: auth.LogoutHandler,
+		})
+
+		r.Add(&cgo.RouteConfig{
+			Path:        "/auth/{provider:google|facebook}",
+			HandlerFunc: auth.OAuth2Handler,
+		})
+
+		r.Add(&cgo.RouteConfig{
+			Path:        "/auth/{provider:google|facebook}/callback",
+			HandlerFunc: auth.OAuth2CallbackHandler,
 		})
 	})
 }

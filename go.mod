@@ -26,6 +26,7 @@ require (
 	github.com/volatiletech/sqlboiler v3.2.0+incompatible
 	golang.org/x/crypto v0.0.0-20190404164418-38d8ce5564a5
 	golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
+	golang.org/x/oauth2 v0.0.0-20190319182350-c85d3e98c914
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2
 	gopkg.in/go-playground/validator.v9 v9.28.0

@@ -22,9 +22,12 @@ func init() {
 		Run: func(cmd *cobra.Command, args []string) {
 			user := &models.User{
 				Email:    email,
-				Username: null.StringFrom(username),
 				Role:     role,
 				Password: null.StringFrom(password),
+			}
+
+			if username != "" {
+				user.Username = null.StringFrom(username)
 			}
 
 			if err := db.CreateUser(user); err != nil {

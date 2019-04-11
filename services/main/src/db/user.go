@@ -34,12 +34,40 @@ func VerifyUserPassword(hash string, p string) bool {
 
 // CreateUser with minimal requirements
 func CreateUser(user *models.User) error {
+	whitelist := []string{
+		"email",
+		"email_hash",
+		"token_version",
+	}
+
 	hash := md5.Sum([]byte(user.Email))
 	user.EmailHash = hex.EncodeToString(hash[:])
 
-	if err := HashUserPassword(user); err != nil {
-		return err
+	if user.Role != "" {
+		whitelist = append(whitelist, "role")
 	}
 
-	return user.InsertG(boil.Whitelist("email", "email_hash", "username", "password", "role", "token_version"))
+	if user.Username.Ptr() != nil {
+		whitelist = append(whitelist, "username")
+	}
+
+	if user.DisplayName.Ptr() != nil {
+		whitelist = append(whitelist, "display_name")
+	}
+
+	if user.Picture.Ptr() != nil {
+		whitelist = append(whitelist, "picture")
+	}
+
+	if user.Password.Ptr() != nil {
+		whitelist = append(whitelist, "password")
+
+		if err := HashUserPassword(user); err != nil {
+			return err
+		}
+	} else {
+		user.TokenVersion = null.Int64From(time.Now().Unix())
+	}
+
+	return user.InsertG(boil.Whitelist(whitelist...))
 }
