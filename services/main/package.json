@@ -9,6 +9,9 @@
     "cli:test": "GO_ENV=test go run ../../cli/*",
     "cli:prod": "GO_ENV=prod go run ../../cli/*",
     "serve": "GO_ENV=dev go run src/server.go",
+    "build:api": "GOOS=linux GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/api ./src/lambda/api",
+    "build:auth": "GOOS=linux GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/auth ./src/lambda/auth",
+    "build": "yarn build:api & yarn build:auth",
     "test": "GO_ENV=test go test ./..."
   }
 }

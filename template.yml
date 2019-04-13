@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Go-vue-starter
+
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  AuthFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/main/bin
+      Handler: auth
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        Logout:
+          Type: Api
+          Properties:
+            Path: /auth/logout
+            Method: POST
+        Local:
+          Type: Api
+          Properties:
+            Path: /auth/local
+            Method: POST
+        LocalNew:
+          Type: Api
+          Properties:
+            Path: /auth/local/new
+            Method: POST
+        OAuth2:
+          Type: Api
+          Properties:
+            Path: /auth/{provider}
+            Method: GET
+        OAuth2Callback:
+          Type: Api
+          Properties:
+            Path: /auth/{provider}/callback
+            Method: GET
+
+  MainApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: services/main/bin
+      Handler: api
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /main/api
+            Method: ANY
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+
+  S3FrontendBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref FrontendBucket
+        PolicyDocument:
+          Statement:
+            - Effect: "Allow"
+              Principal: '*'
+              Action:
+                - "s3:GetObject"
+              Resource: !Sub "${FrontendBucket.Arn}/*"            

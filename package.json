@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "sam:s3": "aws s3 mb s3://go-vue-starter-sam --region eu-west-3",
+    "deploy": "sh ./scripts/deploy.sh go-vue-starter eu-west-3"
+  },
   "devDependencies": {
     "lerna": "^3.13.1"
   }
