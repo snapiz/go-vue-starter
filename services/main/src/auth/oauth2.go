@@ -134,9 +134,9 @@ func OAuth2Handler(context cgo.Context) (map[string]interface{}, error) {
 // OAuth2CallbackHandler for oauth2 callback
 func OAuth2CallbackHandler(context cgo.Context) (map[string]interface{}, error) {
 	input := new(struct {
-		Code        string `form:"code"`
-		ClientID    string `form:"clientId"`
-		RedirectURI string `form:"redirectUri"`
+		Code        string `json:"code"`
+		ClientID    string `json:"clientId"`
+		RedirectURI string `json:"redirectUri"`
 	})
 
 	context.Validate(nil, input, func(e validator.FieldError) string {
@@ -218,5 +218,5 @@ func OAuth2CallbackHandler(context cgo.Context) (map[string]interface{}, error) 
 		context.Panic(http.StatusInternalServerError, "Failed to set token")
 	}
 
-	return context.Redirect(context.Host)
+	return context.Redirect(context.Host + "/login?success=true")
 }

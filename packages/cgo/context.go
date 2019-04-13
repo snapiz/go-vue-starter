@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"os"
 	"reflect"
 	"strconv"
@@ -43,6 +42,7 @@ type (
 		Response http.ResponseWriter `json:"-" toml:"-" yaml:"-"`
 		Params   map[string]string   `json:"-" toml:"-" yaml:"-"`
 		Host     string              `json:"-" toml:"-" yaml:"-"`
+		ClientIP string              `json:"-" toml:"-" yaml:"-"`
 	}
 )
 
@@ -77,6 +77,7 @@ const (
 	contextKeyResponse     key = 13
 	contextKeyParams       key = 14
 	contextKeyHost         key = 15
+	contextKeyClientIP     key = 16
 )
 
 // Validator for validate input
@@ -189,19 +190,26 @@ func (c *Context) RemoveToken() {
 // SetHost set current host using refere as default
 func (c *Context) SetHost() {
 	r := c.Request
+	h := r.Header
 	scheme := "https"
-	referer := r.Referer()
-	u, err := url.Parse(referer)
 
 	if r.TLS == nil {
 		scheme = "http"
 	}
 
-	if referer == "" || err != nil {
-		c.Host = fmt.Sprintf("%s://%s", scheme, r.Host)
-	} else {
-		c.Host = fmt.Sprintf("%s://%s", u.Scheme, u.Host)
+	if xHost, ok := h["X-Forwarded-Host"]; ok {
+		r.Host = xHost[0]
 	}
+
+	if xProto, ok := h["X-Forwarded-Proto"]; ok {
+		scheme = xProto[0]
+	}
+
+	if xFor, ok := h["X-Forwarded-For"]; ok {
+		c.ClientIP = xFor[0]
+	}
+
+	c.Host = fmt.Sprintf("%s://%s", scheme, r.Host)
 }
 
 // SetUser fetch and bind user properties to context
@@ -281,6 +289,7 @@ func NewContext(c Context) context.Context {
 	ctx = context.WithValue(ctx, contextKeyRequest, c.Request)
 	ctx = context.WithValue(ctx, contextKeyHost, c.Host)
 	ctx = context.WithValue(ctx, contextKeyParams, c.Params)
+	ctx = context.WithValue(ctx, contextKeyClientIP, c.ClientIP)
 
 	return ctx
 }
