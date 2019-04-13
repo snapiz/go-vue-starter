@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "serve": "lerna run serve --parallel",
     "sam:s3": "aws s3 mb s3://go-vue-starter-sam --region eu-west-3",
     "deploy": "sh ./scripts/deploy.sh go-vue-starter eu-west-3"
   },

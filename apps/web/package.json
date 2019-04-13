@@ -10,10 +10,12 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@panter/vue-i18next": "^0.15.0",
     "apollo-boost": "^0.3.1",
     "core-js": "^2.6.5",
     "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
+    "i18next": "^15.0.9",
     "vue": "^2.6.6",
     "vue-apollo-router": "^1.0.0"
   },

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h1>Hello {{ me ? me.displayName : "Anonymous" }}</h1>
+    <h1>{{ $t("hello") }} {{ me ? me.displayName : $t("anonymous") }}</h1>
   </div>
 </template>
 
 <script>
 export default {
+  i18nOptions: { namespaces: ["home", "common"] },
   data() {
     return {
       me: this.$routeData.me
