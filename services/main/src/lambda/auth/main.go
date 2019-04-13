@@ -1,9 +1,10 @@
 package main
 
 import (
-	"log"
+	"github.com/snapiz/go-vue-starter/packages/cgo"
+	"github.com/snapiz/go-vue-starter/services/main/src/auth"
 )
 
-func main()  {
-	log.Println("yop")
+func main() {
+	cgo.StartLambda(auth.AddRoutes)
 }

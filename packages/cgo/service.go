@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/awslabs/aws-lambda-go-api-proxy/core"
 	"github.com/gorilla/mux"
 )
 
@@ -23,19 +26,25 @@ func Start(fn func(*Router)) {
 	}
 }
 
-// Start aws lambda start
-/* func Start(config handler.Config) {
+// StartLambda aws lambda start
+func StartLambda(fn func(*Router)) {
 	lambda.Start(func(e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		r := mux.NewRouter()
+
+		fn(&Router{
+			Router: r,
+		})
+
 		accessor := core.RequestAccessor{}
-		r, err := accessor.ProxyEventToHTTPRequest(e)
+		req, err := accessor.ProxyEventToHTTPRequest(e)
 		w := core.NewProxyResponseWriter()
 
 		if err != nil {
 			return events.APIGatewayProxyResponse{}, err
 		}
 
-		graphqlHandler(config, w, r)
+		r.ServeHTTP(w, req)
 
 		return w.GetProxyResponse()
 	})
-} */
+}
