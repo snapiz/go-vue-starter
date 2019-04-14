@@ -4,43 +4,9 @@ Description: Go-vue-starter
 
 Globals:
   Function:
-    Timeout: 5
+    Timeout: 15
 
 Resources:
-  AuthFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: services/main/bin
-      Handler: auth
-      Runtime: go1.x
-      Tracing: Active
-      Events:
-        Logout:
-          Type: Api
-          Properties:
-            Path: /auth/logout
-            Method: POST
-        Local:
-          Type: Api
-          Properties:
-            Path: /auth/local
-            Method: POST
-        LocalNew:
-          Type: Api
-          Properties:
-            Path: /auth/local/new
-            Method: POST
-        OAuth2:
-          Type: Api
-          Properties:
-            Path: /auth/{provider}
-            Method: GET
-        OAuth2Callback:
-          Type: Api
-          Properties:
-            Path: /auth/{provider}/callback
-            Method: GET
-
   MainApiFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -52,7 +18,7 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /main/api
+            Path: /api/main
             Method: ANY
 
   FrontendBucket:

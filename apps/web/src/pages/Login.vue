@@ -1,16 +1,20 @@
 <template>
   <div>
-    <h1>Login</h1>
-    <button @click="login">Login</button>
+    <a :href="oAuth2.google" target="_blank" rel="noopener noreferrer"
+      >Google</a
+    >
+    <a :href="oAuth2.facebook" target="_blank" rel="noopener noreferrer"
+      >Facebook</a
+    >
   </div>
 </template>
 
 <script>
 export default {
-  methods: {
-    login() {
-      window.open("/auth/google", "", "width=452,height=633");
-    }
+  data() {
+    return {
+      ...this.$route.data
+    };
   }
 };
 </script>

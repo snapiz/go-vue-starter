@@ -2,7 +2,7 @@ module.exports = {
   devServer: {
     port: 9000,
     proxy: {
-      "^/(main|auth)": {
+      "^/api": {
         target: "http://localhost:3000"
       }
     }

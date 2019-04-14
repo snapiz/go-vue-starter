@@ -94,8 +94,7 @@ type RouteConfig struct {
 	Path        string
 	Schema      *graphql.Schema
 	HandlerFunc func(context Context) (map[string]interface{}, error)
-	FetchUser func(qm.QueryMod) (interface{}, error)
-
+	FetchUser   func(qm.QueryMod) (interface{}, error)
 }
 
 // Router using for configure server

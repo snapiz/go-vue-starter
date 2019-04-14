@@ -16,6 +16,7 @@ func init() {
 			Fields: graphql.Fields{
 				"node": nodeDefinitions.NodeField,
 				"me":   meQuery,
+				"oAuth2":   oAuth2Query,
 			},
 		}),
 		Mutation: graphql.NewObject(graphql.ObjectConfig{
@@ -23,6 +24,7 @@ func init() {
 			Fields: graphql.Fields{
 				"updateUser":     updateUserMutation,
 				"changePassword": changePasswordMutation,
+				"loginWithOAuth2": loginWithOAuth2Mutation,
 			},
 		}),
 	})

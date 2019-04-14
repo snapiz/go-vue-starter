@@ -10,8 +10,24 @@ export default [
   {
     path: "/login",
     title: "Go vue starter - Login",
-    apollo: false,
+    acl: false,
+    apollo: {
+      query: gql`
+        {
+          oAuth2 {
+            google
+            facebook
+          }
+        }
+      `
+    },
     component: () => import(/* webpackChunkName: 'login' */ "./Login")
+  },
+  {
+    path: "/oauth2/:provider",
+    title: "Go vue starter - OAuth2",
+    apollo: false,
+    component: () => import(/* webpackChunkName: 'oAuth2' */ "./OAuth2")
   },
   {
     path: "/admin",

@@ -10017,10 +10017,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-apollo-router@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/vue-apollo-router/-/vue-apollo-router-1.0.0.tgz#e2dac8c0a0a3372cd581d432f0188eb0ec753c73"
-  integrity sha512-dfS8qjkvfWci4Fvm5BQjKReZHaehSA4C2aIPQgu3/13DcK9TRxcS43qZe7q7AgYZHOQU1Oyt94YFBpQx2rXiSQ==
+vue-apollo-router@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-apollo-router/-/vue-apollo-router-1.1.0.tgz#d216d558492f90511bb8d707a40e9c38eab54047"
+  integrity sha512-wNf8vCIfpUd004hoatRg/uF5t3oA5sUtP6ZMUR8IM/rKytssDeWnA3au5Kvp6Z9pAy1xbyhfL+i1YI0P9VbKWA==
   dependencies:
     core-js "^2.6.5"
     history "^4.9.0"

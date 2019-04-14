@@ -9,7 +9,7 @@ import (
 // AddRoutes to cgo.Router 
 func AddRoutes(r *cgo.Router) {
 	r.Add(&cgo.RouteConfig{
-		Path:   "/main/api",
+		Path:   "/api/main",
 		Schema: &Schema,
 		FetchUser: func(queryMod qm.QueryMod) (interface{}, error) {
 			users, err := models.Users(queryMod).AllG()

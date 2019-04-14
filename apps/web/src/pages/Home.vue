@@ -9,7 +9,7 @@ export default {
   i18nOptions: { namespaces: ["home", "common"] },
   data() {
     return {
-      me: this.$routeData.me
+      me: this.$route.data.me
     };
   }
 };

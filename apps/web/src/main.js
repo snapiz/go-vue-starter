@@ -21,7 +21,7 @@ Vue.use(VueApolloRouter, {
   router,
   apollo: {
     main: new ApolloClient({
-      uri: "/main/api"
+      uri: "/api/main"
     })
   }
 });

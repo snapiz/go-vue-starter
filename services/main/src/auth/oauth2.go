@@ -154,7 +154,7 @@ func OAuth2CallbackHandler(context cgo.Context) (map[string]interface{}, error) 
 	tok, err := conf.Exchange(oauth2.NoContext, input.Code)
 
 	if err != nil {
-		context.Panic(http.StatusInternalServerError, "Failed to exchange")
+		context.Panic(http.StatusInternalServerError, err.Error())
 	}
 
 	p, err := provider.GetProfile(tok)

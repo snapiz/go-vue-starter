@@ -17,6 +17,7 @@ bin
 packaged.yml
 
 # local env files
+.env.prod
 .env.local
 .env.*.local
 

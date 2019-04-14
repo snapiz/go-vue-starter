@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -41,7 +42,7 @@ type (
 		Request  *http.Request       `json:"-" toml:"-" yaml:"-"`
 		Response http.ResponseWriter `json:"-" toml:"-" yaml:"-"`
 		Params   map[string]string   `json:"-" toml:"-" yaml:"-"`
-		Host     string              `json:"-" toml:"-" yaml:"-"`
+		Origin   string              `json:"-" toml:"-" yaml:"-"`
 		ClientIP string              `json:"-" toml:"-" yaml:"-"`
 	}
 )
@@ -76,7 +77,7 @@ const (
 	contextKeyRequest      key = 12
 	contextKeyResponse     key = 13
 	contextKeyParams       key = 14
-	contextKeyHost         key = 15
+	contextKeyOrigin       key = 15
 	contextKeyClientIP     key = 16
 )
 
@@ -151,9 +152,10 @@ func (c *Context) CreateToken() (token string, err error) {
 	}
 
 	token, err = SignToken(jwt.StandardClaims{
-		Id:      c.ID,
-		Subject: strconv.FormatInt(*c.TokenVersion.Ptr(), 10),
-		Issuer:  c.Host,
+		Id:       c.ID,
+		Subject:  strconv.FormatInt(*c.TokenVersion.Ptr(), 10),
+		Issuer:   c.Origin,
+		Audience: c.ClientIP,
 	})
 
 	if err != nil {
@@ -197,8 +199,10 @@ func (c *Context) SetHost() {
 		scheme = "http"
 	}
 
-	if xHost, ok := h["X-Forwarded-Host"]; ok {
-		r.Host = xHost[0]
+	if xOrigin, ok := h["Origin"]; ok {
+		c.Origin = xOrigin[0]
+	} else {
+		c.Origin = fmt.Sprintf("%s://%s", scheme, r.Host)
 	}
 
 	if xProto, ok := h["X-Forwarded-Proto"]; ok {
@@ -206,10 +210,12 @@ func (c *Context) SetHost() {
 	}
 
 	if xFor, ok := h["X-Forwarded-For"]; ok {
-		c.ClientIP = xFor[0]
+		ips := strings.Split(xFor[0], ", ")
+		c.ClientIP = ips[0]
+	} else {
+		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+		c.ClientIP = ip
 	}
-
-	c.Host = fmt.Sprintf("%s://%s", scheme, r.Host)
 }
 
 // SetUser fetch and bind user properties to context
@@ -239,19 +245,17 @@ func (c *Context) FetchUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
 		return
 	}
 
-	claims, err := VerifyToken(authCookie.Value, c.Host)
+	claims, err := VerifyToken(authCookie.Value, c.Origin, c.ClientIP)
 
 	if err != nil {
-		c.Panic(http.StatusInternalServerError, "failed to verify token")
+		c.RemoveToken()
+		return
 	}
 
 	u, err := fetchUser(qm.Where("id = ? AND token_version = ? AND state != 'disable'", claims.Id, claims.Subject))
 
-	if err != nil {
-		c.Panic(http.StatusInternalServerError, "failed to fetch user")
-	}
-
-	if u == nil {
+	if err != nil || u == nil {
+		c.Panic(http.StatusInternalServerError, "Failed to fetch user")
 		c.RemoveToken()
 		return
 	}
@@ -287,7 +291,7 @@ func NewContext(c Context) context.Context {
 	ctx = context.WithValue(ctx, contextKeyUpdatedAt, c.UpdatedAt)
 	ctx = context.WithValue(ctx, contextKeyResponse, c.Response)
 	ctx = context.WithValue(ctx, contextKeyRequest, c.Request)
-	ctx = context.WithValue(ctx, contextKeyHost, c.Host)
+	ctx = context.WithValue(ctx, contextKeyOrigin, c.Origin)
 	ctx = context.WithValue(ctx, contextKeyParams, c.Params)
 	ctx = context.WithValue(ctx, contextKeyClientIP, c.ClientIP)
 
@@ -311,7 +315,8 @@ func FromContext(c context.Context) Context {
 		UpdatedAt:    c.Value(contextKeyUpdatedAt).(null.Time),
 		Response:     c.Value(contextKeyResponse).(http.ResponseWriter),
 		Request:      c.Value(contextKeyRequest).(*http.Request),
-		Host:         c.Value(contextKeyHost).(string),
+		Origin:       c.Value(contextKeyOrigin).(string),
 		Params:       c.Value(contextKeyParams).(map[string]string),
+		ClientIP:     c.Value(contextKeyClientIP).(string),
 	}
 }

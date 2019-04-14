@@ -26,7 +26,7 @@ func SignToken(claims jwt.StandardClaims) (token string, err error) {
 }
 
 // VerifyToken verify token
-func VerifyToken(token string, issuer string) (claims *jwt.StandardClaims, err error) {
+func VerifyToken(token string, issuer string, audience string) (claims *jwt.StandardClaims, err error) {
 	// Parse takes the token string and a function for looking up the key. The latter is especially
 	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
@@ -44,7 +44,7 @@ func VerifyToken(token string, issuer string) (claims *jwt.StandardClaims, err e
 		return nil, err
 	}
 
-	if claims, ok := t.Claims.(*jwt.StandardClaims); ok && t.Valid && claims.VerifyIssuer(issuer, true) {
+	if claims, ok := t.Claims.(*jwt.StandardClaims); ok && t.Valid && claims.VerifyIssuer(issuer, true) && claims.VerifyAudience(audience, true) {
 		return claims, nil
 	}
 

@@ -5,13 +5,12 @@
   "private": true,
   "scripts": {
     "m-cli": "GO_ENV=dev go run cli/*",
+    "m-cli:prod": "GO_ENV=prod go run cli/*",
     "cli": "GO_ENV=dev go run ../../cli/*",
     "cli:test": "GO_ENV=test go run ../../cli/*",
     "cli:prod": "GO_ENV=prod go run ../../cli/*",
     "serve": "GO_ENV=dev go run src/server.go",
-    "build:api": "GOOS=linux GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/api ./src/lambda/api",
-    "build:auth": "GOOS=linux GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/auth ./src/lambda/auth",
-    "build": "yarn build:api & yarn build:auth",
+    "build": "GOOS=linux GOARCH=amd64 go build -ldflags=\"-s -w\" -o bin/api ./src/lambda/api",
     "test": "GO_ENV=test go test ./..."
   }
 }
