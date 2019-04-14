@@ -37,11 +37,10 @@ export default {
         }
       })
       .then(() => {
-        this.error = null;
+        this.$router.context.history.push("/avatar");
       })
       .catch(error => {
         console.log(error);
-        //this.error = getGraphQLError(error);
       });
   }
 };
