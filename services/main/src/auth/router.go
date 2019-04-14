@@ -20,14 +20,4 @@ func AddRoutes(r *cgo.Router) {
 		Path:        "/auth/logout",
 		HandlerFunc: LogoutHandler,
 	})
-
-	r.Add(&cgo.RouteConfig{
-		Path:        "/auth/{provider:google|facebook}",
-		HandlerFunc: OAuth2Handler,
-	})
-
-	r.Add(&cgo.RouteConfig{
-		Path:        "/auth/{provider:google|facebook}/callback",
-		HandlerFunc: OAuth2CallbackHandler,
-	})
 }

@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: center;
 }
+
 #login a {
   padding: 0.5rem 1rem;
   background-color: rgb(95, 158, 160);

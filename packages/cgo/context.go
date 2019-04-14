@@ -255,7 +255,6 @@ func (c *Context) FetchUser(fetchUser func(qm.QueryMod) (interface{}, error)) {
 	u, err := fetchUser(qm.Where("id = ? AND token_version = ? AND state != 'disable'", claims.Id, claims.Subject))
 
 	if err != nil || u == nil {
-		c.Panic(http.StatusInternalServerError, "Failed to fetch user")
 		c.RemoveToken()
 		return
 	}
